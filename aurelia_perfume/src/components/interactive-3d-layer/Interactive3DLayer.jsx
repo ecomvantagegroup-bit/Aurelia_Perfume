@@ -20,7 +20,7 @@ export default defineComponent({
     let renderer, scene, camera, animationFrameId;
     const models = {
       hero: null,
-      world1: null, // Forest Essence (Model 2)
+      forest: null, // Forest Essence (Model 2)
     };
 
     let floatingLeavesGroup = null;
@@ -78,23 +78,15 @@ export default defineComponent({
       return bottleGroup;
     };
 
-    // =========================================================================
-    // MODEL 2 PLACEHOLDER (Forest Essence)
-    // Currently using procedural mesh geometry. 
-    // Swap this function for GLTFLoader when GLB file is imported.
-    // =========================================================================
+    // MODEL 2: Forest Essence Bottle
     const createForestBottleModel = () => {
       const forestGroup = new THREE.Group();
 
-      /* ---------------------------------------------------------------------
-         BEGIN: PROCEDURAL MESH PLACEHOLDER (REMOVE OR COMMENT WHEN GLB IS READY)
-         --------------------------------------------------------------------- */
-      // Frosted Emerald Green Glass Material
       const frostedGreenGlass = new THREE.MeshPhysicalMaterial({
         color: 0x113824,
         emissive: 0x03140b,
         metalness: 0.05,
-        roughness: 0.35, // Frosted finish
+        roughness: 0.35,
         transmission: 0.82,
         ior: 1.48,
         thickness: 1.8,
@@ -108,62 +100,22 @@ export default defineComponent({
         roughness: 0.25,
       });
 
-      // Main Bottle Geometry
       const body = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 2.4, 48), frostedGreenGlass);
       body.position.y = -0.3;
       forestGroup.add(body);
 
-      // Metallic Neck Ring
       const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.22, 32), brushedGoldMat);
       neck.position.y = 0.95;
       forestGroup.add(neck);
 
-      // Wooden/Gold Square Cap
       const cap = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.65, 0.55), brushedGoldMat);
       cap.position.y = 1.38;
       forestGroup.add(cap);
-      /* ---------------------------------------------------------------------
-         END: PROCEDURAL MESH PLACEHOLDER
-         --------------------------------------------------------------------- */
 
       forestGroup.position.set(0, -0.2, 0);
       forestGroup.visible = false;
       return forestGroup;
     };
-
-    // =========================================================================
-    // TODO: WHEN GLB IS READY, USE THIS LOADER FUNCTION INSTEAD:
-    // =========================================================================
-    /*
-    const loadForestGLBModel = (scene, callback) => {
-      const loader = new GLTFLoader();
-      loader.load(
-        '/models/forest_essence.glb', // Path to your GLB file
-        (gltf) => {
-          const model = gltf.scene;
-          model.position.set(0, -0.2, 0);
-          model.scale.set(1, 1, 1);
-          model.visible = false;
-
-          // Enable shadow casting or custom material tweaks if needed
-          model.traverse((node) => {
-            if (node.isMesh) {
-              node.castShadow = true;
-              node.receiveShadow = true;
-            }
-          });
-
-          scene.add(model);
-          models.world1 = model;
-          if (callback) callback(model);
-        },
-        undefined,
-        (error) => {
-          console.error('An error occurred while loading the GLB model:', error);
-        }
-      );
-    };
-    */
 
     // Particle Effect: Floating Forest Leaves
     const createFloatingLeaves = () => {
@@ -205,31 +157,31 @@ export default defineComponent({
 
     // Scroll progress handler sent from ForestEssence.jsx
     const handleForestScrollProgress = (e) => {
-      if (props.activeSection !== 'world1') return;
+      if (props.activeSection !== 'forest') return;
       const { progress } = e.detail;
 
-      const model2 = models.world1;
-      if (!model2) return;
+      const forestModel = models.forest;
+      if (!forestModel) return;
 
       // 1. Zoom in model as image sequence plays
       const targetScale = 1 + progress * 0.35;
       const targetZ = progress * 0.8;
 
-      gsap.to(model2.scale, { x: targetScale, y: targetScale, z: targetScale, duration: 0.2 });
-      gsap.to(model2.position, { z: targetZ, duration: 0.2 });
+      gsap.to(forestModel.scale, { x: targetScale, y: targetScale, z: targetScale, duration: 0.2 });
+      gsap.to(forestModel.position, { z: targetZ, duration: 0.2 });
 
-      // 2. Disappear model to left side when section is ending (progress > 0.85)
+      // 2. Slide off when progress > 0.85
       if (progress > 0.85) {
-        const exitProgress = (progress - 0.85) / 0.15; // 0 to 1
-        gsap.to(model2.position, { x: -3.5 * exitProgress, duration: 0.3 });
-        gsap.to(model2.rotation, { y: exitProgress * -1.2, duration: 0.3 });
+        const exitProgress = (progress - 0.85) / 0.15;
+        gsap.to(forestModel.position, { x: -3.5 * exitProgress, duration: 0.3 });
+        gsap.to(forestModel.rotation, { y: exitProgress * -1.2, duration: 0.3 });
       } else {
-        gsap.to(model2.position, { x: 0, duration: 0.3 });
+        gsap.to(forestModel.position, { x: 0, duration: 0.3 });
       }
     };
 
     const transitionSection = (targetSection) => {
-      // Transition Hero Model
+      // Handle Hero Model
       if (models.hero) {
         if (targetSection === 'hero') {
           models.hero.visible = true;
@@ -243,27 +195,29 @@ export default defineComponent({
         }
       }
 
-      // Transition Forest Essence Model (Model 2)
-      if (models.world1) {
-        if (targetSection === 'world1') {
-          models.world1.visible = true;
+      // Handle Forest Essence Model (Active during 'forest' and 'notes')
+      if (models.forest) {
+        const isForestActive = ['forest', 'notes'].includes(targetSection);
+
+        if (isForestActive) {
+          models.forest.visible = true;
           if (floatingLeavesGroup) floatingLeavesGroup.visible = true;
+
           gsap.fromTo(
-            models.world1.position,
+            models.forest.position,
             { x: 3, y: -0.2, z: 0 },
             { x: 0, y: -0.2, z: 0, duration: 1.4, ease: 'power3.out' }
           );
           gsap.fromTo(
-            models.world1.scale,
+            models.forest.scale,
             { x: 0.2, y: 0.2, z: 0.2 },
             { x: 1, y: 1, z: 1, duration: 1.2, ease: 'power2.out' }
           );
         } else {
-          // Slide off to left if transitioning away
-          gsap.to(models.world1.position, {
+          gsap.to(models.forest.position, {
             x: -4, duration: 0.8, ease: 'power2.in',
             onComplete: () => {
-              models.world1.visible = false;
+              models.forest.visible = false;
               if (floatingLeavesGroup) floatingLeavesGroup.visible = false;
             },
           });
@@ -290,24 +244,16 @@ export default defineComponent({
 
       // Environment lighting
       scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-      const keyLight = new THREE.DirectionalLight(0xdcfce7, 3.0); // Soft botanical tint
+      const keyLight = new THREE.DirectionalLight(0xdcfce7, 3.0);
       keyLight.position.set(4, 6, 3);
       scene.add(keyLight);
 
-      // Models initialization
+      // Initialize Models
       models.hero = createHeroBottle();
       scene.add(models.hero);
 
-      // =========================================================================
-      // MODEL 2 SETUP:
-      // Currently using procedural placeholder.
-      // When ready for GLB: Comment out `createForestBottleModel()` and 
-      // uncomment `loadForestGLBModel(scene, () => transitionSection(props.activeSection));`
-      // =========================================================================
-      models.world1 = createForestBottleModel();
-      scene.add(models.world1);
-
-      // loadForestGLBModel(scene, () => transitionSection(props.activeSection));
+      models.forest = createForestBottleModel();
+      scene.add(models.forest);
 
       floatingLeavesGroup = createFloatingLeaves();
       scene.add(floatingLeavesGroup);
@@ -320,17 +266,17 @@ export default defineComponent({
         animationFrameId = requestAnimationFrame(animate);
         const elapsedTime = clock.getElapsedTime();
 
-        // Ease Mouse Parallax
         mouse.x += (mouse.targetX - mouse.x) * 0.05;
         mouse.y += (mouse.targetY - mouse.y) * 0.05;
 
-        // Apply Gentle Rotation & Floating motion to active model
-        const activeModel = models[props.activeSection];
+        // Animate currently active model
+        const activeModelKey = ['forest', 'notes'].includes(props.activeSection) ? 'forest' : props.activeSection;
+        const activeModel = models[activeModelKey];
+
         if (activeModel && activeModel.visible) {
           activeModel.rotation.y += 0.003;
-          activeModel.position.y = -0.2 + Math.sin(elapsedTime * 1.5) * 0.05; // Gentle float
+          activeModel.position.y = -0.2 + Math.sin(elapsedTime * 1.5) * 0.05;
 
-          // Mouse Parallax Offset
           activeModel.rotation.z = mouse.x * 0.15;
           activeModel.rotation.x = 0.05 + mouse.y * 0.15;
         }
@@ -371,7 +317,7 @@ export default defineComponent({
     return () => (
       <div
         ref={canvasRef}
-        class="fixed inset-0 z-10 h-screen w-screen pointer-events-none overflow-hidden"
+        class="fixed inset-0 z-20 h-screen w-screen pointer-events-none overflow-hidden"
       />
     );
   },
