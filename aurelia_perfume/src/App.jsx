@@ -91,94 +91,97 @@ export default defineComponent({
       scrollTriggers = [];
     });
 
-    return () => (
-      <main class="relative min-h-screen w-full bg-background text-text selection:bg-primary selection:text-black overflow-x-hidden">
-        
-        {/* =========================================================
-            TOP LEVEL OVERLAY: PRELOADER (z-50)
-            Shown on initial load, fades away when assets are ready.
-           ========================================================= */}
-        {isLoading.value && <Preloader onLoaded={handlePreloaderLoaded} />}
+    return () => {
+      // Access reactive ref inside the render function scope so reactivity stays bound
+      const currentSection = activeSection.value;
 
-        {/* =========================================================
-            LAYER 1: BACKGROUND ENGINE (z-10)
-            Controls image sequences (Forest, Ocean, Amber) & overlays
-           ========================================================= */}
-        <BackgroundLayerController activeSection={activeSection.value} />
-
-        {/* =========================================================
-            LAYER 2: INTERACTIVE 3D LAYER (z-20)
-            3D Bottles, lighting, floating leaf/bubble particles
-           ========================================================= */}
-        <Interactive3DLayer activeSection={activeSection.value} />
-
-        {/* =========================================================
-            LAYER 3: DOM TEXT, NAVBAR & CTAs (z-30)
-            Interactive foreground UI
-           ========================================================= */}
-        <div class="relative z-30 w-full pointer-events-auto">
+      return (
+        <main class="relative min-h-screen w-full bg-background text-text selection:bg-primary selection:text-black overflow-x-hidden">
           
-          {/* Fixed Navbar persistent across all sections */}
-          <Navbar activeSection={activeSection.value} />
+          {/* =========================================================
+              TOP LEVEL OVERLAY: PRELOADER (z-50)
+              Shown on initial load, fades away when assets are ready.
+             ========================================================= */}
+          {isLoading.value && <Preloader onLoaded={handlePreloaderLoaded} />}
 
-          {/* 02 - Hero */}
-          <div id="sec-hero">
-            <HeroSection />
-          </div>
+          {/* =========================================================
+              LAYER 1: BACKGROUND ENGINE (z-10)
+              Controls image sequences (Forest, Ocean, Amber) & overlays
+             ========================================================= */}
+          <BackgroundLayerController activeSection={currentSection} />
 
-          {/* 03 - Forest Essence */}
-          <div id="sec-forest">
-            <ForestEssence />
-          </div>
+          {/* =========================================================
+              LAYER 2: INTERACTIVE 3D LAYER (z-20)
+              3D Bottles, lighting, floating leaf/bubble particles
+             ========================================================= */}
+          <Interactive3DLayer activeSection={currentSection} />
 
-          {/* 04 - Fragrance Notes */}
-          <div id="sec-notes">
-            <FragranceNotes />
-          </div>
-          
+          {/* =========================================================
+              LAYER 3: DOM TEXT, NAVBAR & CTAs (z-30)
+              Interactive foreground UI
+             ========================================================= */}
+          <div class="relative z-30 w-full pointer-events-auto">
+            
+            {/* Fixed Navbar persistent across all sections */}
+            <Navbar activeSection={currentSection} />
 
-          {/* 05 - Ocean Bloom */} 
-          <div id="sec-ocean">
-            <OceanBloom />
-          </div>
-          
+            {/* 02 - Hero */}
+            <div id="sec-hero">
+              <HeroSection />
+            </div>
 
-          {/* 06 - Aurelia Story */}
-          {/* 
-          <div id="sec-story">
-            <AureliaStory />
-          </div>
-          */}
+            {/* 03 - Forest Essence */}
+            <div id="sec-forest">
+              <ForestEssence />
+            </div>
 
-          {/* 07 - Golden Amber */}
-          {/* 
-          <div id="sec-amber">
-            <GoldenAmber />
-          </div>
-          */}
+            {/* 04 - Fragrance Notes */}
+            <div id="sec-notes">
+              <FragranceNotes />
+            </div>
+            
+            {/* 05 - Ocean Bloom */} 
+            <div id="sec-ocean">
+              <OceanBloom />
+            </div>
 
-          {/* 08 - The Collection */}
-          {/* 
-          <div id="sec-collection">
-            <CollectionSection />
-          </div>
-          */}
+            {/* 06 - Aurelia Story */}
+            {/* 
+            <div id="sec-story">
+              <AureliaStory />
+            </div>
+            */}
 
-          {/* 09 - Final CTA */}
-          {/* 
-          <div id="sec-cta">
-            <FinalCTA />
-          </div>
-          */}
+            {/* 07 - Golden Amber */}
+            {/* 
+            <div id="sec-amber">
+              <GoldenAmber />
+            </div>
+            */}
 
-          {/* 10 - Footer */}
-          {/* 
-          <div id="sec-footer">
-            <FooterSection />
+            {/* 08 - The Collection */}
+            {/* 
+            <div id="sec-collection">
+              <CollectionSection />
+            </div>
+            */}
+
+            {/* 09 - Final CTA */}
+            {/* 
+            <div id="sec-cta">
+              <FinalCTA />
+            </div>
+            */}
+
+            {/* 10 - Footer */}
+            {/* 
+            <div id="sec-footer">
+              <FooterSection />
+            </div>
+            */}
           </div>
-          */}
-        </div>
-      </main>
-    );
+        </main>
+      );
+    };
   },
 });

@@ -1,4 +1,4 @@
-import { defineComponent, computed, ref, watch } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import gsap from 'gsap';
 import ForestSequence from './sequences/forestSequence';
 import OceanSequence from './sequences/OceanSequence';
@@ -15,10 +15,6 @@ export default defineComponent({
   },
   setup(props) {
     const irisOverlayRef = ref(null);
-
-    const isForestActive = computed(() => ['forest'].includes(props.activeSection));
-    const isOceanActive = computed(() => props.activeSection === 'ocean');
-    const isAmberActive = computed(() => ['amber', 'collection', 'cta'].includes(props.activeSection));
 
     // Circular Iris Expand/Shrink Transition on enter/exit of Fragrance Notes section
     watch(
@@ -42,24 +38,31 @@ export default defineComponent({
       }
     );
 
-    return () => (
-      <div class="bg-layer-fixed relative w-full h-full">
-        {/* Film grain and vignette overlays */}
-        <div class="bg-film-grain" />
-        <div class="bg-vignette" />
+    return () => {
+      // Evaluate active flags inside the render function so Vue tracks reactivity properly
+      const isForestActive = ['forest'].includes(props.activeSection);
+      const isOceanActive = props.activeSection === 'ocean';
+      const isAmberActive = ['amber', 'collection', 'cta'].includes(props.activeSection);
 
-        {/* Modular Sequence Engines */}
-        <ForestSequence isActive={isForestActive.value} />
-        <OceanSequence isActive={isOceanActive.value} />
-        <AmberSequence isActive={isAmberActive.value} />
+      return (
+        <div class="bg-layer-fixed relative w-full h-full">
+          {/* Film grain and vignette overlays */}
+          <div class="bg-film-grain" />
+          <div class="bg-vignette" />
 
-        {/* Circular Mask Overlay for Section 04 Editorial Black Transition */}
-        <div
-          ref={irisOverlayRef}
-          class="fixed inset-0 z-15 bg-[#08080a] pointer-events-none"
-          style={{ clipPath: 'circle(0% at 50% 50%)' }}
-        />
-      </div>
-    );
+          {/* Modular Sequence Engines */}
+          <ForestSequence isActive={isForestActive} />
+          <OceanSequence isActive={isOceanActive} />
+          <AmberSequence isActive={isAmberActive} />
+
+          {/* Circular Mask Overlay for Section 04 Editorial Black Transition */}
+          <div
+            ref={irisOverlayRef}
+            class="fixed inset-0 z-15 bg-[#08080a] pointer-events-none"
+            style={{ clipPath: 'circle(0% at 50% 50%)' }}
+          />
+        </div>
+      );
+    };
   },
 });
