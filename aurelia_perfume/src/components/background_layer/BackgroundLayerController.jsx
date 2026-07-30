@@ -1,4 +1,4 @@
-import { defineComponent, computed, ref, watch, onMounted } from 'vue';
+import { defineComponent, computed, ref, watch } from 'vue';
 import gsap from 'gsap';
 import ForestSequence from './sequences/forestSequence';
 import OceanSequence from './sequences/OceanSequence';
@@ -20,21 +20,19 @@ export default defineComponent({
     const isOceanActive = computed(() => props.activeSection === 'ocean');
     const isAmberActive = computed(() => ['amber', 'collection', 'cta'].includes(props.activeSection));
 
-    // Handle Iris Circular Expansion for Fragrance Notes Section
+    // Circular Iris Expand/Shrink Transition on enter/exit of Fragrance Notes section
     watch(
       () => props.activeSection,
       (newSection) => {
         if (!irisOverlayRef.value) return;
 
         if (newSection === 'notes') {
-          // Circular expand from center to full black
           gsap.to(irisOverlayRef.value, {
             clipPath: 'circle(150% at 50% 50%)',
             duration: 1.2,
             ease: 'power3.inOut',
           });
         } else {
-          // Collapse circular mask back
           gsap.to(irisOverlayRef.value, {
             clipPath: 'circle(0% at 50% 50%)',
             duration: 1.0,
@@ -55,7 +53,7 @@ export default defineComponent({
         <OceanSequence isActive={isOceanActive.value} />
         <AmberSequence isActive={isAmberActive.value} />
 
-        {/* Circular Transition Layer for Fragrance Notes Section */}
+        {/* Circular Mask Overlay for Section 04 Editorial Black Transition */}
         <div
           ref={irisOverlayRef}
           class="fixed inset-0 z-15 bg-[#08080a] pointer-events-none"
