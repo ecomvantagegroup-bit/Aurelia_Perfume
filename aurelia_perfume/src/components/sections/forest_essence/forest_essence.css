@@ -6,23 +6,7 @@
 
 @layer components {
   .forest-section-container {
-    @apply relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background px-6 py-12 select-none;
-  }
-
-  /* Fullscreen Image Sequence Canvas */
-  .forest-sequence-canvas {
-    @apply absolute inset-0 z-0 h-full w-full object-cover pointer-events-none;
-  }
-
-  /* Cinematic Vignette Overlay */
-  .forest-vignette-overlay {
-    @apply pointer-events-none absolute inset-0 z-0;
-    background: radial-gradient(
-      circle at center,
-      rgba(8, 8, 10, 0.2) 0%,
-      rgba(8, 8, 10, 0.75) 75%,
-      rgba(8, 8, 10, 0.95) 100%
-    );
+    @apply relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-transparent px-6 py-12 select-none;
   }
 
   /* Center Content Container */
