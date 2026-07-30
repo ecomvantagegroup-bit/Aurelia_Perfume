@@ -1,0 +1,56 @@
+@reference "@/style.css";
+
+/* =========================================================
+   03 — Forest Essence Section Styles
+========================================================= */
+
+@layer components {
+  .forest-section-container {
+    @apply relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background px-6 py-12 select-none;
+  }
+
+  /* Fullscreen Image Sequence Canvas */
+  .forest-sequence-canvas {
+    @apply absolute inset-0 z-0 h-full w-full object-cover pointer-events-none;
+  }
+
+  /* Cinematic Vignette Overlay */
+  .forest-vignette-overlay {
+    @apply pointer-events-none absolute inset-0 z-0;
+    background: radial-gradient(
+      circle at center,
+      rgba(8, 8, 10, 0.2) 0%,
+      rgba(8, 8, 10, 0.75) 75%,
+      rgba(8, 8, 10, 0.95) 100%
+    );
+  }
+
+  /* Center Content Container */
+  .forest-content-wrapper {
+    @apply relative z-20 flex flex-col items-center text-center max-w-2xl mx-auto space-y-6 pointer-events-auto;
+  }
+
+  /* Number Code Tag */
+  .forest-number-tag {
+    @apply text-xs md:text-sm font-extralight tracking-[0.4em] text-emerald-400/90 uppercase border-b border-emerald-500/20 pb-1;
+  }
+
+  /* Main Title Styling */
+  .forest-title {
+    @apply text-3xl md:text-5xl lg:text-6xl font-light uppercase tracking-[0.3em] text-white;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Notes Pills Bar */
+  .forest-notes-container {
+    @apply flex items-center justify-center gap-3 pt-2 text-xs md:text-sm font-extralight tracking-[0.25em] text-emerald-100/80 uppercase;
+  }
+
+  .forest-note-badge {
+    @apply transition-colors duration-300 hover:text-white;
+  }
+
+  .forest-note-separator {
+    @apply text-emerald-500/40 text-[10px];
+  }
+}
