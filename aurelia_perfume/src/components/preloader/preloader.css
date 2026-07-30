@@ -1,25 +1,27 @@
-@reference ""../../style.css"";
+@reference "../../style.css";
 
 /* ===========================
-   Preloader Component Styles
+   Preloader Dark Luxury Styles
 =========================== */
 
 @layer components {
   .preloader-screen {
-    @apply fixed inset-0 z-50 flex flex-col items-center justify-between px-6 py-12 select-none;
-    background-color: var(--color-text); /* #111827 - Dark luxury background */
-    color: var(--color-surface);        /* #ffffff */
+    @apply fixed inset-0 z-50 flex items-center justify-center select-none bg-background text-text overflow-hidden;
+  }
+
+  .preloader-center-content {
+    @apply flex flex-col items-center justify-center text-center w-full max-w-md px-6;
   }
 
   .preloader-track {
-    @apply relative h-[2px] w-full overflow-hidden rounded-full;
+    @apply relative h-[1px] w-full overflow-hidden rounded-none;
     background-color: rgba(255, 255, 255, 0.08);
   }
 
   .preloader-bar {
-    @apply absolute left-0 top-0 h-full transition-all duration-75 ease-out;
-    background-color: var(--color-primary); /* #d4af37 - Gold fill */
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.35);
+    @apply absolute left-0 top-0 h-full transition-all duration-100 ease-out;
+    background-color: var(--color-primary);
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
   }
 
   .preloader-accent-text {
