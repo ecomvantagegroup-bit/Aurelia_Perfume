@@ -1,5 +1,5 @@
-// src/components/background_layer/BackgroundLayerController.jsx
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, ref, watch, onMounted } from 'vue';
+import gsap from 'gsap';
 import ForestSequence from './sequences/forestSequence';
 import OceanSequence from './sequences/OceanSequence';
 import AmberSequence from './sequences/AmberSequence';
@@ -10,17 +10,42 @@ export default defineComponent({
   props: {
     activeSection: {
       type: String,
-      default: 'hero', // 'hero' | 'forest' | 'notes' | 'ocean' | 'story' | 'amber' | 'collection' | 'cta' | 'footer'
+      default: 'hero',
     },
   },
   setup(props) {
-    // Map active section to appropriate sequence component
-    const isForestActive = computed(() => ['forest', 'notes'].includes(props.activeSection));
-    const isOceanActive = computed(() => props.activeSection === 'ocean'); // 'story' dissolves to pure black
+    const irisOverlayRef = ref(null);
+
+    const isForestActive = computed(() => ['forest'].includes(props.activeSection));
+    const isOceanActive = computed(() => props.activeSection === 'ocean');
     const isAmberActive = computed(() => ['amber', 'collection', 'cta'].includes(props.activeSection));
 
+    // Handle Iris Circular Expansion for Fragrance Notes Section
+    watch(
+      () => props.activeSection,
+      (newSection) => {
+        if (!irisOverlayRef.value) return;
+
+        if (newSection === 'notes') {
+          // Circular expand from center to full black
+          gsap.to(irisOverlayRef.value, {
+            clipPath: 'circle(150% at 50% 50%)',
+            duration: 1.2,
+            ease: 'power3.inOut',
+          });
+        } else {
+          // Collapse circular mask back
+          gsap.to(irisOverlayRef.value, {
+            clipPath: 'circle(0% at 50% 50%)',
+            duration: 1.0,
+            ease: 'power3.inOut',
+          });
+        }
+      }
+    );
+
     return () => (
-      <div class="bg-layer-fixed">
+      <div class="bg-layer-fixed relative w-full h-full">
         {/* Film grain and vignette overlays */}
         <div class="bg-film-grain" />
         <div class="bg-vignette" />
@@ -29,6 +54,13 @@ export default defineComponent({
         <ForestSequence isActive={isForestActive.value} />
         <OceanSequence isActive={isOceanActive.value} />
         <AmberSequence isActive={isAmberActive.value} />
+
+        {/* Circular Transition Layer for Fragrance Notes Section */}
+        <div
+          ref={irisOverlayRef}
+          class="fixed inset-0 z-15 bg-[#08080a] pointer-events-none"
+          style={{ clipPath: 'circle(0% at 50% 50%)' }}
+        />
       </div>
     );
   },

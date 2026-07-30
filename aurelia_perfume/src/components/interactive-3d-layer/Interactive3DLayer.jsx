@@ -1,10 +1,6 @@
 import { defineComponent, ref, onMounted, onUnmounted, watch } from 'vue';
 import * as THREE from 'three';
 import gsap from 'gsap';
-// =========================================================================
-// TODO: UNCOMMENT THIS IMPORT WHEN READY TO LOAD YOUR .GLB FILE
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-// =========================================================================
 
 export default defineComponent({
   name: 'Interactive3DLayer',
@@ -16,17 +12,17 @@ export default defineComponent({
   },
   setup(props) {
     const canvasRef = ref(null);
+    const cardFrameRef = ref(null);
 
     let renderer, scene, camera, animationFrameId;
     const models = {
       hero: null,
-      forest: null, // Forest Essence (Model 2)
+      forest: null,
     };
 
     let floatingLeavesGroup = null;
     const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
 
-    // Create Studio Reflection Map
     const createStudioEnvironment = () => {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
@@ -44,7 +40,6 @@ export default defineComponent({
       return texture;
     };
 
-    // MODEL 1: Monolithic Hero Bottle
     const createHeroBottle = () => {
       const bottleGroup = new THREE.Group();
       const glassMaterial = new THREE.MeshPhysicalMaterial({
@@ -78,7 +73,6 @@ export default defineComponent({
       return bottleGroup;
     };
 
-    // MODEL 2: Forest Essence Bottle
     const createForestBottleModel = () => {
       const forestGroup = new THREE.Group();
 
@@ -117,7 +111,6 @@ export default defineComponent({
       return forestGroup;
     };
 
-    // Particle Effect: Floating Forest Leaves
     const createFloatingLeaves = () => {
       const count = 25;
       const group = new THREE.Group();
@@ -149,13 +142,11 @@ export default defineComponent({
       return group;
     };
 
-    // Parallax Mouse Handler
     const handleMouseMove = (event) => {
       mouse.targetX = (event.clientX / window.innerWidth - 0.5) * 0.6;
       mouse.targetY = (event.clientY / window.innerHeight - 0.5) * 0.6;
     };
 
-    // Scroll progress handler sent from ForestEssence.jsx
     const handleForestScrollProgress = (e) => {
       if (props.activeSection !== 'forest') return;
       const { progress } = e.detail;
@@ -163,14 +154,12 @@ export default defineComponent({
       const forestModel = models.forest;
       if (!forestModel) return;
 
-      // 1. Zoom in model as image sequence plays
       const targetScale = 1 + progress * 0.35;
       const targetZ = progress * 0.8;
 
       gsap.to(forestModel.scale, { x: targetScale, y: targetScale, z: targetScale, duration: 0.2 });
       gsap.to(forestModel.position, { z: targetZ, duration: 0.2 });
 
-      // 2. Slide off when progress > 0.85
       if (progress > 0.85) {
         const exitProgress = (progress - 0.85) / 0.15;
         gsap.to(forestModel.position, { x: -3.5 * exitProgress, duration: 0.3 });
@@ -181,7 +170,7 @@ export default defineComponent({
     };
 
     const transitionSection = (targetSection) => {
-      // Handle Hero Model
+      // Hero Model Logic
       if (models.hero) {
         if (targetSection === 'hero') {
           models.hero.visible = true;
@@ -195,7 +184,7 @@ export default defineComponent({
         }
       }
 
-      // Handle Forest Essence Model (Active during 'forest' and 'notes')
+      // Forest Essence Model Logic
       if (models.forest) {
         const isForestActive = ['forest', 'notes'].includes(targetSection);
 
@@ -203,16 +192,31 @@ export default defineComponent({
           models.forest.visible = true;
           if (floatingLeavesGroup) floatingLeavesGroup.visible = true;
 
-          gsap.fromTo(
-            models.forest.position,
-            { x: 3, y: -0.2, z: 0 },
-            { x: 0, y: -0.2, z: 0, duration: 1.4, ease: 'power3.out' }
-          );
-          gsap.fromTo(
-            models.forest.scale,
-            { x: 0.2, y: 0.2, z: 0.2 },
-            { x: 1, y: 1, z: 1, duration: 1.2, ease: 'power2.out' }
-          );
+          if (targetSection === 'notes') {
+            // Fragrance Notes Mode: Scale to medium size and frame inside card template
+            gsap.to(models.forest.scale, { x: 0.68, y: 0.68, z: 0.68, duration: 1.2, ease: 'power3.out' });
+            gsap.to(models.forest.position, { x: 0, y: 0.15, z: 0.5, duration: 1.2, ease: 'power3.out' });
+
+            if (cardFrameRef.value) {
+              gsap.to(cardFrameRef.value, { opacity: 1, scale: 1, duration: 1, ease: 'power3.out' });
+            }
+          } else {
+            // Forest Essence Mode: Standard full-screen presentation
+            gsap.fromTo(
+              models.forest.position,
+              { x: 3, y: -0.2, z: 0 },
+              { x: 0, y: -0.2, z: 0, duration: 1.4, ease: 'power3.out' }
+            );
+            gsap.fromTo(
+              models.forest.scale,
+              { x: 0.2, y: 0.2, z: 0.2 },
+              { x: 1, y: 1, z: 1, duration: 1.2, ease: 'power2.out' }
+            );
+
+            if (cardFrameRef.value) {
+              gsap.to(cardFrameRef.value, { opacity: 0, scale: 0.9, duration: 0.6 });
+            }
+          }
         } else {
           gsap.to(models.forest.position, {
             x: -4, duration: 0.8, ease: 'power2.in',
@@ -221,6 +225,9 @@ export default defineComponent({
               if (floatingLeavesGroup) floatingLeavesGroup.visible = false;
             },
           });
+          if (cardFrameRef.value) {
+            gsap.to(cardFrameRef.value, { opacity: 0, scale: 0.9, duration: 0.6 });
+          }
         }
       }
     };
@@ -242,13 +249,11 @@ export default defineComponent({
 
       container.appendChild(renderer.domElement);
 
-      // Environment lighting
       scene.add(new THREE.AmbientLight(0xffffff, 0.2));
       const keyLight = new THREE.DirectionalLight(0xdcfce7, 3.0);
       keyLight.position.set(4, 6, 3);
       scene.add(keyLight);
 
-      // Initialize Models
       models.hero = createHeroBottle();
       scene.add(models.hero);
 
@@ -260,7 +265,6 @@ export default defineComponent({
 
       transitionSection(props.activeSection);
 
-      // Render Loop
       let clock = new THREE.Clock();
       const animate = () => {
         animationFrameId = requestAnimationFrame(animate);
@@ -269,19 +273,19 @@ export default defineComponent({
         mouse.x += (mouse.targetX - mouse.x) * 0.05;
         mouse.y += (mouse.targetY - mouse.y) * 0.05;
 
-        // Animate currently active model
         const activeModelKey = ['forest', 'notes'].includes(props.activeSection) ? 'forest' : props.activeSection;
         const activeModel = models[activeModelKey];
 
         if (activeModel && activeModel.visible) {
           activeModel.rotation.y += 0.003;
-          activeModel.position.y = -0.2 + Math.sin(elapsedTime * 1.5) * 0.05;
+          
+          const baseOffsetY = props.activeSection === 'notes' ? 0.15 : -0.2;
+          activeModel.position.y = baseOffsetY + Math.sin(elapsedTime * 1.5) * 0.04;
 
-          activeModel.rotation.z = mouse.x * 0.15;
-          activeModel.rotation.x = 0.05 + mouse.y * 0.15;
+          activeModel.rotation.z = mouse.x * 0.12;
+          activeModel.rotation.x = 0.05 + mouse.y * 0.12;
         }
 
-        // Animate Floating Leaves
         if (floatingLeavesGroup && floatingLeavesGroup.visible) {
           floatingLeavesGroup.children.forEach((leaf) => {
             leaf.rotation.x += leaf.userData.rotSpeedX;
@@ -315,10 +319,16 @@ export default defineComponent({
     });
 
     return () => (
-      <div
-        ref={canvasRef}
-        class="fixed inset-0 z-20 h-screen w-screen pointer-events-none overflow-hidden"
-      />
+      <div class="fixed inset-0 z-20 h-screen w-screen pointer-events-none overflow-hidden flex items-center justify-center">
+        {/* Card Template Outline for Fragrance Notes Section */}
+        <div
+          ref={cardFrameRef}
+          class="absolute w-[320px] h-[480px] md:w-[380px] md:h-[540px] rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm shadow-2xl transition-all pointer-events-none opacity-0 scale-90 -translate-y-6"
+        />
+
+        {/* Canvas Render Element */}
+        <div ref={canvasRef} class="absolute inset-0 h-full w-full" />
+      </div>
     );
   },
 });

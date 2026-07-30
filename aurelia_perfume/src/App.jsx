@@ -15,8 +15,8 @@ import Interactive3DLayer from './components/interactive-3d-layer/Interactive3DL
 // Layer 3: Section Text & CTA Components
 import HeroSection from './components/sections/hero/hero';
 import ForestEssence from './components/sections/forest_essence/forest_essence';
+import FragranceNotes from './components/sections/fragrance_notes/fragrance_notes';
 /* 
-import FragranceNotes from './components/sections/FragranceNotes';
 import OceanBloom from './components/sections/OceanBloom';
 import AureliaStory from './components/sections/AureliaStory';
 import GoldenAmber from './components/sections/GoldenAmber';
@@ -48,9 +48,9 @@ export default defineComponent({
 
       const sections = [
         { id: 'sec-hero', key: 'hero' },
-        { id: 'sec-forest', key: 'forest' },
-        /* 
+        { id: 'sec-forest', key: 'forest' }, 
         { id: 'sec-notes', key: 'notes' },
+        /*
         { id: 'sec-ocean', key: 'ocean' },
         { id: 'sec-story', key: 'story' },
         { id: 'sec-amber', key: 'amber' },
@@ -132,11 +132,10 @@ export default defineComponent({
           </div>
 
           {/* 04 - Fragrance Notes */}
-          {/* 
           <div id="sec-notes">
             <FragranceNotes />
           </div>
-          */}
+          
 
           {/* 05 - Ocean Bloom */}
           {/* 

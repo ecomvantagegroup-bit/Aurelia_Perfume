@@ -1,0 +1,7 @@
+@reference "@/style.css";
+
+@layer components {
+  .notes-section-container {
+    background-color: transparent; /* Controlled by Layer 1 transition */
+  }
+}
