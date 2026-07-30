@@ -1,0 +1,19 @@
+@reference "@/style.css";
+
+/* ocean_bloom.css */
+
+.ocean-bloom-section {
+  /* Ensured zero background obstruction */
+  background: transparent !important;
+}
+
+/* Custom subtle glow for typography headers */
+.ocean-bloom-section h1 span {
+  text-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+}
+
+/* Optional custom smooth selection styling for luxury feel */
+.ocean-bloom-section ::selection {
+  background-color: rgba(56, 189, 248, 0.3);
+  color: #ffffff;
+}

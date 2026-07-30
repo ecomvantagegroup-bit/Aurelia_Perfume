@@ -16,8 +16,8 @@ import Interactive3DLayer from './components/interactive-3d-layer/Interactive3DL
 import HeroSection from './components/sections/hero/hero';
 import ForestEssence from './components/sections/forest_essence/forest_essence';
 import FragranceNotes from './components/sections/fragrance_notes/fragrance_notes';
-/* 
-import OceanBloom from './components/sections/OceanBloom';
+import OceanBloom from './components/sections/ocean_bloom/ocean_bloom';
+/*
 import AureliaStory from './components/sections/AureliaStory';
 import GoldenAmber from './components/sections/GoldenAmber';
 import CollectionSection from './components/sections/CollectionSection';
@@ -50,8 +50,8 @@ export default defineComponent({
         { id: 'sec-hero', key: 'hero' },
         { id: 'sec-forest', key: 'forest' }, 
         { id: 'sec-notes', key: 'notes' },
-        /*
         { id: 'sec-ocean', key: 'ocean' },
+        /*
         { id: 'sec-story', key: 'story' },
         { id: 'sec-amber', key: 'amber' },
         { id: 'sec-collection', key: 'collection' },
@@ -137,12 +137,11 @@ export default defineComponent({
           </div>
           
 
-          {/* 05 - Ocean Bloom */}
-          {/* 
+          {/* 05 - Ocean Bloom */} 
           <div id="sec-ocean">
             <OceanBloom />
           </div>
-          */}
+          
 
           {/* 06 - Aurelia Story */}
           {/* 
