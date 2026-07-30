@@ -1,5 +1,163 @@
+@import "tailwindcss";
+
 /* ===========================
-   Utilities
+   Theme — Dark Luxury Core
+=========================== */
+
+@theme {
+  /* Color Palette */
+  --color-primary: #c5a059;          /* Muted Champagne Gold */
+  --color-primary-dark: #9e7d3b;     /* Deep Antique Gold */
+  --color-primary-light: #e6cb8b;    /* Highlight Gold */
+  --color-secondary: #121216;        /* Subtle Elevated Black */
+  --color-background: #08080a;       /* Deep Obsidian Pitch Black */
+  --color-surface: #0f0f13;          /* Dark Panel Surface */
+  --color-surface-hover: #17171d;    /* Elevated Surface */
+  --color-text: #f4f4f6;             /* Soft Ivory White */
+  --color-muted: #8e8e96;            /* Subtle Muted Grey */
+  --color-border: rgba(255, 255, 255, 0.08); /* Ultra-fine Separator Line */
+
+  /* Scene Accents */
+  --color-accent-amber: #d97706;
+  --color-accent-rose: #be123c;
+  --color-accent-emerald: #047857;
+
+  /* Geometry & Shadows */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.5rem;
+
+  --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Cormorant Garamond", "Cinzel", "Playfair Display", Georgia, serif;
+
+  --container-width: 1360px;
+}
+
+/* ===========================
+   Base Setup & Grain Overlay
+=========================== */
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    @apply scroll-smooth;
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+
+  body {
+    @apply antialiased min-h-screen relative overflow-x-hidden;
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+  }
+
+  /* Subtle Editorial Film Grain Background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  img {
+    @apply block max-w-full;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  a {
+    @apply transition-colors duration-300;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: #000000;
+  }
+}
+
+/* ===========================
+   Editorial Components
+=========================== */
+
+@layer components {
+  .container {
+    @apply mx-auto w-full max-w-[var(--container-width)] px-6 sm:px-10 lg:px-16;
+  }
+
+  .section {
+    @apply py-28 md:py-36;
+  }
+
+  .card {
+    @apply rounded-sm bg-surface border transition-all duration-500;
+    border-color: var(--color-border);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center tracking-[0.25em] uppercase text-xs font-light px-7 py-4 transition-all duration-500 rounded-none;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-black;
+    box-shadow: 0 0 25px rgba(197, 160, 89, 0.15);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-primary-light);
+  }
+
+  .btn-outline {
+    @apply border text-text bg-transparent;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .input {
+    @apply w-full rounded-none border bg-surface px-5 py-4 text-sm outline-none transition duration-300 text-text;
+    border-color: var(--color-border);
+  }
+
+  .input:focus {
+    border-color: var(--color-primary);
+  }
+
+  /* Editorial Headlines */
+  .heading {
+    font-family: var(--font-serif);
+    @apply text-5xl font-light tracking-tight md:text-7xl lg:text-8xl text-white leading-[1.05];
+  }
+
+  .subheading {
+    @apply text-base md:text-lg font-extralight tracking-widest text-muted leading-relaxed uppercase;
+  }
+
+  .editorial-tag {
+    @apply inline-block tracking-[0.3em] uppercase text-[11px] font-medium text-primary px-3 py-1 rounded-full;
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    background-color: rgba(197, 160, 89, 0.05);
+  }
+}
+
+/* ===========================
+   Dark Luxury Utilities
 =========================== */
 
 @utility flex-center {
@@ -11,7 +169,9 @@
 }
 
 @utility glass-dark {
-  @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  @apply backdrop-blur-xl border;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 @utility text-gradient-gold {
@@ -22,10 +182,10 @@
 }
 
 @utility separator-line {
-  @apply h-[1px] w-full bg-gradient-to-r from-transparent via-white/15 to-transparent my-12;
+  @apply h-[1px] w-full my-12;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
 }
 
-/* Fixed Tailwind v4 Utility Syntax */
 @utility hide-scrollbar {
   scrollbar-width: none;
 

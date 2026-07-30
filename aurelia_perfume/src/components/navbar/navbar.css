@@ -1,0 +1,53 @@
+@reference "../../style.css";
+
+/* ===========================
+   Hidden Hover Navbar Styles
+=========================== */
+
+@layer components {
+  /* Trigger hit-area zone at top of viewport */
+  .nav-trigger-zone {
+    @apply fixed top-0 left-0 right-0 z-50 h-16 w-full cursor-pointer;
+  }
+
+  /* Main Navigation Bar Container */
+  .nav-header {
+    @apply fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ease-out;
+    background-color: rgba(8, 8, 10, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Hidden vs Visible States */
+  .nav-hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+  }
+
+  .nav-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Navigation Link Items */
+  .nav-link {
+    @apply relative text-xs tracking-[0.25em] uppercase text-text/70 transition-colors duration-300 py-1;
+  }
+
+  .nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 h-[1px] w-0 transition-all duration-300;
+    background-color: var(--color-primary);
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}
