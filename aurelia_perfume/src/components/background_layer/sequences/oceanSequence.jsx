@@ -1,5 +1,4 @@
-// src/components/background_layer/sequences/OceanSequence.jsx
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, watch, onMounted, onUnmounted } from 'vue';
 
 export default defineComponent({
   name: 'OceanSequence',
@@ -11,22 +10,9 @@ export default defineComponent({
     const isMobile = window.innerWidth <= 768;
     const totalFrames = isMobile ? 120 : 250;
     const folder = isMobile ? '/ocean_bloom/mobile' : '/ocean_bloom/laptop_and_desktop';
-    
+
     let images = [];
     let currentFrame = 0;
-
-    const preload = () => {
-      images = [];
-      for (let i = 0; i < totalFrames; i++) {
-        const img = new Image();
-        const paddedIndex = String(i + 1).padStart(4, '0');
-        img.src = `${folder}/${paddedIndex}.webp`;
-        if (i === 0) {
-          img.onload = () => renderFrame(0);
-        }
-        images.push(img);
-      }
-    };
 
     const renderFrame = (index) => {
       const canvas = canvasRef.value;
@@ -41,7 +27,34 @@ export default defineComponent({
         const shiftX = (canvas.width - img.width * ratio) / 2;
         const shiftY = (canvas.height - img.height * ratio) / 2;
 
-        ctx.drawImage(img, 0, 0, img.width, img.height, shiftX, shiftY, img.width * ratio, img.height * ratio);
+        ctx.drawImage(
+          img,
+          0,
+          0,
+          img.width,
+          img.height,
+          shiftX,
+          shiftY,
+          img.width * ratio,
+          img.height * ratio
+        );
+      }
+    };
+
+    const preload = () => {
+      images = [];
+      for (let i = 0; i < totalFrames; i++) {
+        const img = new Image();
+        const paddedIndex = String(i + 1).padStart(4, '0');
+        img.src = `${folder}/${paddedIndex}.webp`;
+        
+        if (i === 0) {
+          img.onload = () => {
+            // Render frame 0 whenever image 0 finishes loading
+            renderFrame(0);
+          };
+        }
+        images.push(img);
       }
     };
 
@@ -59,6 +72,17 @@ export default defineComponent({
       renderFrame(currentFrame);
     };
 
+    // FIX: Watch when section becomes active and force render immediately
+    watch(
+      () => props.isActive,
+      (active) => {
+        if (active) {
+          handleResize();
+          renderFrame(currentFrame);
+        }
+      }
+    );
+
     onMounted(() => {
       preload();
       handleResize();
@@ -74,7 +98,7 @@ export default defineComponent({
     return () => (
       <canvas
         ref={canvasRef}
-        class="bg-sequence-canvas transition-opacity duration-1000"
+        class="bg-sequence-canvas transition-opacity duration-1000 w-full h-full block"
         style={{ opacity: props.isActive ? 1 : 0 }}
       />
     );

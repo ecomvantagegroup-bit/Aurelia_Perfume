@@ -3,8 +3,9 @@
 /* ocean_bloom.css */
 
 .ocean-bloom-section {
-  /* Ensured zero background obstruction */
   background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
 /* Custom subtle glow for typography headers */

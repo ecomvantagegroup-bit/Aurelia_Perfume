@@ -2,19 +2,14 @@ import { defineComponent, ref, onMounted, onUnmounted, nextTick } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// UI Overlays
+// Layer Controllers & Direct Overlays
 import Preloader from './components/preloader/preloader';
 import Navbar from './components/navbar/navbar';
-
-// Layer Controllers
 import BackgroundLayerController from './components/background_layer/BackgroundLayerController';
 import Interactive3DLayer from './components/interactive-3d-layer/Interactive3DLayer';
 
-// Section Components
-import HeroSection from './components/sections/hero/hero';
-import ForestEssence from './components/sections/forest_essence/forest_essence';
-import FragranceNotes from './components/sections/fragrance_notes/fragrance_notes';
-import OceanBloom from './components/sections/ocean_bloom/ocean_bloom';
+// Content Layer
+import ContentLayer from './components/content_layer/content_layer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,6 +26,7 @@ export default defineComponent({
     };
 
     const initScrollTriggers = () => {
+      // Clear out previous triggers if re-initialized
       scrollTriggers.forEach((st) => st.kill());
       scrollTriggers = [];
 
@@ -45,12 +41,22 @@ export default defineComponent({
         const el = document.getElementById(id);
         if (!el) return;
 
+        // Custom trigger offsets so the last section ('ocean') registers accurately 
+        // even if the page doesn't scroll past 50% viewport height.
+        const isOcean = key === 'ocean';
+        const startPoint = isOcean ? 'top 85%' : 'top 50%';
+        const endPoint = isOcean ? 'bottom bottom' : 'bottom 50%';
+
         const trigger = ScrollTrigger.create({
           trigger: el,
-          start: 'top 50%',
-          end: 'bottom 50%',
-          onEnter: () => { activeSection.value = key; },
-          onEnterBack: () => { activeSection.value = key; },
+          start: startPoint,
+          end: endPoint,
+          onEnter: () => {
+            activeSection.value = key;
+          },
+          onEnterBack: () => {
+            activeSection.value = key;
+          },
         });
 
         scrollTriggers.push(trigger);
@@ -60,7 +66,11 @@ export default defineComponent({
     onMounted(async () => {
       await nextTick();
       initScrollTriggers();
-      ScrollTrigger.refresh();
+      
+      // Secondary refresh after fonts & images lay out completely
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
     });
 
     onUnmounted(() => {
@@ -70,35 +80,20 @@ export default defineComponent({
 
     return () => (
       <main class="relative min-h-screen w-full bg-background text-text selection:bg-primary selection:text-black overflow-x-hidden">
-        {/* Preloader */}
+        {/* Preloader Screen */}
         {isLoading.value && <Preloader onLoaded={handlePreloaderLoaded} />}
 
-        {/* Background Canvas Layer */}
+        {/* Global Navigation */}
+        <Navbar />
+
+        {/* 1. Background Image Sequence & Atmosphere Layer */}
         <BackgroundLayerController activeSection={activeSection.value} />
 
-        {/* 3D Scene Layer */}
+        {/* 2. Interactive WebGL / 3D Canvas Layer */}
         <Interactive3DLayer activeSection={activeSection.value} />
 
-        {/* Foreground UI & Sections */}
-        <div class="relative z-30 w-full pointer-events-auto">
-          <Navbar activeSection={activeSection.value} />
-
-          <div id="sec-hero">
-            <HeroSection />
-          </div>
-
-          <div id="sec-forest">
-            <ForestEssence />
-          </div>
-
-          <div id="sec-notes">
-            <FragranceNotes />
-          </div>
-
-          <div id="sec-ocean">
-            <OceanBloom />
-          </div>
-        </div>
+        {/* 3. HTML Content & DOM Layout Layer */}
+        <ContentLayer />
       </main>
     );
   },

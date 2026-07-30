@@ -1,12 +1,17 @@
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ocean_bloom.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default defineComponent({
   name: 'OceanBloom',
   setup() {
     const containerRef = ref(null);
     const textGroupRef = ref(null);
+
+    let scrollTriggerInstance = null;
 
     const fragranceNotes = [
       { category: 'Top Notes', detail: 'Crisp Sea Salt, Italian Bergamot, Coastal Mist' },
@@ -15,7 +20,27 @@ export default defineComponent({
     ];
 
     onMounted(() => {
-      // Subtle entrance animation for editorial content
+      const sectionEl = document.getElementById('sec-ocean');
+      if (!sectionEl) return;
+
+      scrollTriggerInstance = ScrollTrigger.create({
+        trigger: sectionEl,
+        start: 'top top',
+        end: '+=200%',
+        pin: true,
+        scrub: 0.5,
+        onUpdate: (self) => {
+          window.dispatchEvent(
+            new CustomEvent('ocean-scroll-progress', {
+              detail: {
+                progress: self.progress,
+                direction: self.direction,
+              },
+            })
+          );
+        },
+      });
+
       if (textGroupRef.value) {
         gsap.fromTo(
           textGroupRef.value.children,
@@ -30,16 +55,21 @@ export default defineComponent({
           }
         );
       }
+
+      ScrollTrigger.refresh();
+    });
+
+    onUnmounted(() => {
+      if (scrollTriggerInstance) scrollTriggerInstance.kill();
     });
 
     return () => (
       <section
         ref={containerRef}
+        id="world-ocean"
         class="ocean-bloom-section relative min-h-screen w-full flex items-center justify-between px-8 md:px-16 lg:px-24 bg-transparent pointer-events-none select-none"
       >
-        {/* Left Column: Essential Title & Atmosphere */}
         <div ref={textGroupRef} class="max-w-lg z-10 space-y-6">
-          {/* Section Indicator */}
           <div class="flex items-center space-x-3">
             <span class="h-[1px] w-8 bg-sky-400/60" />
             <p class="text-xs font-mono uppercase tracking-[0.3em] text-sky-300/80">
@@ -47,7 +77,6 @@ export default defineComponent({
             </p>
           </div>
 
-          {/* Main Title */}
           <h1 class="text-5xl md:text-7xl font-extralight tracking-tight text-white font-serif leading-none">
             Ocean <br />
             <span class="italic font-normal bg-gradient-to-r from-sky-200 via-cyan-300 to-blue-400 bg-clip-text text-transparent">
@@ -55,7 +84,6 @@ export default defineComponent({
             </span>
           </h1>
 
-          {/* Fragrance Character Badges */}
           <div class="flex items-center space-x-2 pt-2">
             {['Aquatic', 'Mineral', 'Fresh'].map((tag) => (
               <span
@@ -67,12 +95,10 @@ export default defineComponent({
             ))}
           </div>
 
-          {/* Description */}
           <p class="text-sm md:text-base text-slate-300/80 leading-relaxed font-light">
             Descend into cooler aquatic depths. A crisp synthesis of coastal sunrise, mineral currents, and pristine underwater refraction capturing the raw vitality of the open sea.
           </p>
 
-          {/* Call To Action / Interactive Trigger */}
           <div class="pt-4 pointer-events-auto">
             <button class="group relative inline-flex items-center space-x-4 px-6 py-3 rounded-full border border-sky-300/30 bg-sky-950/10 hover:bg-sky-500/10 backdrop-blur-md transition-all duration-300">
               <span class="text-xs font-mono tracking-widest uppercase text-sky-100">
@@ -83,7 +109,6 @@ export default defineComponent({
           </div>
         </div>
 
-        {/* Right Column: Fragrance Pyramid / Notes Cards */}
         <div class="hidden lg:flex flex-col space-y-4 max-w-xs z-10 pointer-events-auto">
           {fragranceNotes.map((note) => (
             <div

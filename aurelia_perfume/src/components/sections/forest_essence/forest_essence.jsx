@@ -17,10 +17,9 @@ export default defineComponent({
     let scrollTriggerInstance = null;
 
     onMounted(() => {
-      const sectionEl = document.getElementById('world1');
+      const sectionEl = document.getElementById('sec-forest');
       if (!sectionEl) return;
 
-      // Pin Section & Sync Scroll Progress Event to Layer 1 (Background Sequence) & Layer 2 (3D Model)
       scrollTriggerInstance = ScrollTrigger.create({
         trigger: sectionEl,
         start: 'top top',
@@ -28,7 +27,6 @@ export default defineComponent({
         pin: true,
         scrub: 0.5,
         onUpdate: (self) => {
-          // Dispatch custom event so BackgroundLayerController syncs sequence frames automatically
           window.dispatchEvent(
             new CustomEvent('forest-scroll-progress', {
               detail: {
@@ -40,7 +38,6 @@ export default defineComponent({
         },
       });
 
-      // Typography entrance animation
       gsap.fromTo(
         [numberRef.value, titleRef.value, notesRef.value],
         { opacity: 0, y: 40 },
@@ -56,6 +53,8 @@ export default defineComponent({
           },
         }
       );
+
+      ScrollTrigger.refresh();
     });
 
     onUnmounted(() => {
@@ -64,15 +63,9 @@ export default defineComponent({
 
     return () => (
       <section id="world1" class="forest-section-container relative z-30 pointer-events-auto min-h-screen flex items-center justify-center">
-        {/* DOM Content Layer Only */}
         <div ref={contentRef} class="forest-content-wrapper text-center">
-          <div ref={numberRef} class="forest-number-tag">
-            01
-          </div>
-
-          <h2 ref={titleRef} class="forest-title">
-            FOREST ESSENCE
-          </h2>
+          <div ref={numberRef} class="forest-number-tag">01</div>
+          <h2 ref={titleRef} class="forest-title">FOREST ESSENCE</h2>
 
           <div ref={notesRef} class="forest-notes-container">
             <span class="forest-note-badge">Fresh</span>
