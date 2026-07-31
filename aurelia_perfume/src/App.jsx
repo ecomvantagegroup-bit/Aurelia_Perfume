@@ -39,6 +39,7 @@ export default defineComponent({
         { id: 'sec-notes', key: 'notes' },
         { id: 'sec-ocean', key: 'ocean' },
         { id: 'sec-story', key: 'story' },
+        { id: 'sec-amber', key: 'amber' },
       ];
 
       sections.forEach(({ id, key }, index) => {

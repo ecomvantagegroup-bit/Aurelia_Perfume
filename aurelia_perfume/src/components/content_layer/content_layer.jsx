@@ -7,6 +7,7 @@ import ForestEssence from '../sections/forest_essence/forest_essence';
 import FragranceNotes from '../sections/fragrance_notes/fragrance_notes';
 import OceanBloom from '../sections/ocean_bloom/ocean_bloom';
 import AureliaStory from '../sections/aurelia_story/aurelia_story';
+import GoldenAmber from '../sections/golden_amber/amber';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,7 +64,12 @@ export default defineComponent({
           <div id="sec-story">
             <AureliaStory />
           </div>
-        </div>
+
+          <div id="sec-amber">
+            <GoldenAmber />
+          </div>
+          
+        </div>  
       </div>
     );
   },

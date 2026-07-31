@@ -20,8 +20,9 @@ export default defineComponent({
     const storyFrames = isMobile ? 96 : 240;
     const amberFrames = isMobile ? 120 : 250;
 
-    // Combined total frame count: Mobile = 528, Desktop = 1124
-    const totalFrames = forestFrames + notesFrames + oceanFrames + storyFrames + amberFrames;
+    // Combined total frame count: Mobile = 648, Desktop = 1324
+    const totalFrames =
+      forestFrames + notesFrames + oceanFrames + storyFrames + amberFrames;
 
     const images = [];
     let currentFrame = 0;
@@ -50,6 +51,7 @@ export default defineComponent({
         const shiftX = (canvas.width - img.width * ratio) / 2;
         const shiftY = (canvas.height - img.height * ratio) / 2;
 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(
           img,
           0,
@@ -82,7 +84,7 @@ export default defineComponent({
       const amberFolder = isMobile
         ? '/golden_amber/mobile'
         : '/golden_amber/laptop_and_desktop';
-      
+
       // 1. Forest Essence frames
       for (let i = 0; i < forestFrames; i++) {
         const img = new Image();
@@ -104,7 +106,7 @@ export default defineComponent({
         images.push(img);
       }
 
-      // 4. Aurelia Story frames 
+      // 4. Aurelia Story frames
       for (let i = 0; i < storyFrames; i++) {
         const img = new Image();
         img.src = `${storyFolder}/${String(i + 1).padStart(4, '0')}.webp`;

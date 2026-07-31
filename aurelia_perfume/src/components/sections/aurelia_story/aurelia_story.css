@@ -1,4 +1,4 @@
-@reference "@style.css";
+@reference "@/style.css";
 
 .story-section-container {
   background-color: transparent !important;
