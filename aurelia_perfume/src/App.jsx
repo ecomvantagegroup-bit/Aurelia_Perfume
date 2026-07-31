@@ -91,7 +91,7 @@ export default defineComponent({
         <BackgroundLayerController activeSection={activeSection.value} />
 
         {/* 2. Interactive WebGL / 3D Canvas Layer */}
-        <Interactive3DLayer activeSection={activeSection.value} />
+        {/*<Interactive3DLayer activeSection={activeSection.value} />*/}
 
         {/* 3. HTML Content & DOM Layout Layer */}
         <ContentLayer />

@@ -51,7 +51,6 @@ export default defineComponent({
       for (let i = 0; i < totalFrames; i++) {
         const img = new Image();
         const paddedIndex = String(i + 1).padStart(4, '0');
-        // Check if your extension is .webp or .jpg in public/fragrance_notes
         img.src = `${folder}/${paddedIndex}.webp`;
 
         if (i === 0) {
