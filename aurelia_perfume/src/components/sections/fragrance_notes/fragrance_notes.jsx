@@ -10,16 +10,16 @@ export default defineComponent({
   setup() {
     const containerRef = ref(null);
     const contentRef = ref(null);
-    let triggerInstance = null;
+    let revealTrigger = null;
+    let progressTrigger = null;
 
     onMounted(() => {
       const sectionEl = containerRef.value;
       if (!sectionEl) return;
 
-      // Vertical reveal stagger for luxury editorial specification
+      // 1. Text reveal stagger animation
       const revealElements = sectionEl.querySelectorAll('.editorial-reveal');
-
-      triggerInstance = ScrollTrigger.create({
+      revealTrigger = ScrollTrigger.create({
         trigger: sectionEl,
         start: 'top 70%',
         onEnter: () => {
@@ -37,19 +37,42 @@ export default defineComponent({
           );
         },
       });
+
+      // 2. SCRUB TRIGGER: Dispatches scroll progress to FragranceSequence canvas
+      progressTrigger = ScrollTrigger.create({
+        trigger: sectionEl,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: (self) => {
+          const detail = { progress: self.progress };
+          // Dispatches both event formats to guarantee listener match
+          window.dispatchEvent(
+            new CustomEvent('fragrance-scroll-progress', { detail })
+          );
+          window.dispatchEvent(
+            new CustomEvent('fragranceSequenceProgress', { detail })
+          );
+        },
+      });
     });
 
     onUnmounted(() => {
-      if (triggerInstance) triggerInstance.kill();
+      if (revealTrigger) revealTrigger.kill();
+      if (progressTrigger) progressTrigger.kill();
     });
 
     return () => (
       <section
         ref={containerRef}
-        class="notes-section-container relative z-30 min-h-screen w-full flex items-center justify-center text-white px-8 py-24 select-none pointer-events-auto"
+        /* Increased min-h to 250vh so the sequence has smooth scroll duration */
+        class="notes-section-container relative z-30 min-h-[250vh] w-full flex items-center justify-center text-white px-8 py-24 select-none pointer-events-auto"
       >
-        <div ref={contentRef} class="max-w-xl w-full flex flex-col items-center text-center space-y-12">
-          
+        {/* Sticky content container so the text stays centered while scrolling through the sequence */}
+        <div
+          ref={contentRef}
+          class="sticky top-0 h-screen max-w-xl w-full flex flex-col items-center justify-center text-center space-y-12"
+        >
           {/* Section Header */}
           <div class="editorial-reveal space-y-3">
             <span class="text-[10px] md:text-xs font-mono tracking-[0.4em] text-emerald-400/80 uppercase">
@@ -110,7 +133,6 @@ export default defineComponent({
             <span>Eau De Parfum</span>
             <span>75% VOL.</span>
           </div>
-
         </div>
       </section>
     );

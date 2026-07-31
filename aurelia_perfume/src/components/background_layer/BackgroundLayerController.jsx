@@ -1,10 +1,4 @@
-import { defineComponent } from 'vue';
-
-import ForestSequence from './sequences/forestSequence';
-import FragranceSequence from './sequences/fragranceSequence';
-import OceanSequence from './sequences/OceanSequence';
-import AmberSequence from './sequences/amberSequence';
-
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import './background_layer.css';
 
 export default defineComponent({
@@ -15,54 +9,149 @@ export default defineComponent({
       default: 'hero',
     },
   },
-  setup(props) {
-    return () => {
-      const { activeSection } = props;
+  setup() {
+    const canvasRef = ref(null);
+    const isMobile = window.innerWidth <= 768;
 
-      const isForest = activeSection === 'forest';
-      const isNotes = activeSection === 'notes';
-      const isOcean = activeSection === 'ocean';
-      const isAmber = activeSection === 'amber';
+    // Frame specs per section
+    const forestFrames = isMobile ? 120 : 250;
+    const notesFrames = isMobile ? 192 : 384;
+    const oceanFrames = isMobile ? 120 : 250;
+    const storyFrames = isMobile ? 96 : 240;
+    const amberFrames = isMobile ? 120 : 250;
 
-      return (
-        <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-transparent">
-          {/* Base Atmosphere Overlays */}
-          <div class="bg-film-grain" />
-          <div class="bg-vignette" />
+    // Combined total frame count: Mobile = 528, Desktop = 1124
+    const totalFrames = forestFrames + notesFrames + oceanFrames + storyFrames + amberFrames;
 
-          {/* 03 — Forest Essence Sequence */}
-          <div
-            class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-            style={{ opacity: isForest ? 1 : 0 }}
-          >
-            <ForestSequence isActive={isForest} />
-          </div>
+    const images = [];
+    let currentFrame = 0;
+    let targetFrame = 0;
+    let animationFrameId = null;
 
-          {/* 04 — Fragrance Notes Sequence (Replaces Iris Mask between Forest & Ocean) */}
-          <div
-            class="absolute inset-0 transition-opacity duration-1000 ease-in-out z-0"
-            style={{ opacity: isNotes ? 1 : 0 }}
-          >
-            <FragranceSequence isActive={isNotes} />
-          </div>
+    const render = () => {
+      const canvas = canvasRef.value;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
 
-          {/* 05 — Ocean Bloom Sequence */}
-          <div
-            class="absolute inset-0 transition-opacity duration-1000 ease-in-out z-0"
-            style={{ opacity: isOcean ? 1 : 0 }}
-          >
-            <OceanSequence isActive={isOcean} />
-          </div>
-
-          {/* 06 — Amber Sequence */}
-          <div
-            class="absolute inset-0 transition-opacity duration-1000 ease-in-out z-0"
-            style={{ opacity: isAmber ? 1 : 0 }}
-          >
-            <AmberSequence isActive={isAmber} />
-          </div>
-        </div>
+      // Linear interpolation (lerp) for smooth motion
+      currentFrame += (targetFrame - currentFrame) * 0.15;
+      const frameToDraw = Math.min(
+        Math.max(0, Math.round(currentFrame)),
+        totalFrames - 1
       );
+
+      const img = images[frameToDraw];
+      if (img && img.complete && img.naturalWidth !== 0) {
+        const ratio = Math.max(
+          canvas.width / img.width,
+          canvas.height / img.height
+        );
+        const shiftX = (canvas.width - img.width * ratio) / 2;
+        const shiftY = (canvas.height - img.height * ratio) / 2;
+
+        ctx.drawImage(
+          img,
+          0,
+          0,
+          img.width,
+          img.height,
+          shiftX,
+          shiftY,
+          img.width * ratio,
+          img.height * ratio
+        );
+      }
+
+      animationFrameId = requestAnimationFrame(render);
     };
+
+    const preloadAllImages = () => {
+      const forestFolder = isMobile
+        ? '/forest_essence/mobile'
+        : '/forest_essence/laptop_and_desktop';
+      const notesFolder = isMobile
+        ? '/fragrance_notes/mobile'
+        : '/fragrance_notes/laptop_and_desktop';
+      const oceanFolder = isMobile
+        ? '/ocean_bloom/mobile'
+        : '/ocean_bloom/laptop_and_desktop';
+      const storyFolder = isMobile
+        ? '/aurelia_story/mobile'
+        : '/aurelia_story/laptop_and_desktop';
+      const amberFolder = isMobile
+        ? '/golden_amber/mobile'
+        : '/golden_amber/laptop_and_desktop';
+      
+      // 1. Forest Essence frames
+      for (let i = 0; i < forestFrames; i++) {
+        const img = new Image();
+        img.src = `${forestFolder}/${String(i + 1).padStart(4, '0')}.webp`;
+        images.push(img);
+      }
+
+      // 2. Fragrance Notes frames
+      for (let i = 0; i < notesFrames; i++) {
+        const img = new Image();
+        img.src = `${notesFolder}/${String(i + 1).padStart(4, '0')}.webp`;
+        images.push(img);
+      }
+
+      // 3. Ocean Bloom frames
+      for (let i = 0; i < oceanFrames; i++) {
+        const img = new Image();
+        img.src = `${oceanFolder}/${String(i + 1).padStart(4, '0')}.webp`;
+        images.push(img);
+      }
+
+      // 4. Aurelia Story frames 
+      for (let i = 0; i < storyFrames; i++) {
+        const img = new Image();
+        img.src = `${storyFolder}/${String(i + 1).padStart(4, '0')}.webp`;
+        images.push(img);
+      }
+
+      // 5. Golden Amber frames
+      for (let i = 0; i < amberFrames; i++) {
+        const img = new Image();
+        img.src = `${amberFolder}/${String(i + 1).padStart(4, '0')}.webp`;
+        images.push(img);
+      }
+    };
+
+    const handleGlobalProgress = (e) => {
+      const { progress } = e.detail;
+      targetFrame = progress * (totalFrames - 1);
+    };
+
+    const handleResize = () => {
+      if (!canvasRef.value) return;
+      canvasRef.value.width = window.innerWidth;
+      canvasRef.value.height = window.innerHeight;
+    };
+
+    onMounted(() => {
+      preloadAllImages();
+      handleResize();
+
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('global-sequence-progress', handleGlobalProgress);
+
+      render();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('global-sequence-progress', handleGlobalProgress);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    });
+
+    return () => (
+      <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-transparent">
+        <div class="bg-film-grain" />
+        <div class="bg-vignette" />
+        <canvas ref={canvasRef} class="w-full h-full block" />
+      </div>
+    );
   },
 });
