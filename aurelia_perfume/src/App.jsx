@@ -2,7 +2,7 @@ import { defineComponent, ref, onMounted, onUnmounted, nextTick } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Layer Controllers & Direct Overlays
+// Layer Controllers & System Overlays
 import Preloader from './components/preloader/preloader';
 import Navbar from './components/navbar/navbar';
 import BackgroundLayerController from './components/background_layer/BackgroundLayerController';
@@ -26,26 +26,27 @@ export default defineComponent({
     };
 
     const initScrollTriggers = () => {
-      // Clear out previous triggers if re-initialized
+      // Clear previous triggers
       scrollTriggers.forEach((st) => st.kill());
       scrollTriggers = [];
 
+      // Array matching all sections in ContentLayer
       const sections = [
         { id: 'sec-hero', key: 'hero' },
         { id: 'sec-forest', key: 'forest' },
         { id: 'sec-notes', key: 'notes' },
         { id: 'sec-ocean', key: 'ocean' },
+        { id: 'sec-amber', key: 'amber' },
       ];
 
-      sections.forEach(({ id, key }) => {
+      sections.forEach(({ id, key }, index) => {
         const el = document.getElementById(id);
         if (!el) return;
 
-        // Custom trigger offsets so the last section ('ocean') registers accurately 
-        // even if the page doesn't scroll past 50% viewport height.
-        const isOcean = key === 'ocean';
-        const startPoint = isOcean ? 'top 85%' : 'top 50%';
-        const endPoint = isOcean ? 'bottom bottom' : 'bottom 50%';
+        // Give the last section a broader start trigger so it always registers
+        const isLastSection = index === sections.length - 1;
+        const startPoint = isLastSection ? 'top 85%' : 'top 50%';
+        const endPoint = isLastSection ? 'bottom bottom' : 'bottom 50%';
 
         const trigger = ScrollTrigger.create({
           trigger: el,
@@ -66,8 +67,8 @@ export default defineComponent({
     onMounted(async () => {
       await nextTick();
       initScrollTriggers();
-      
-      // Secondary refresh after fonts & images lay out completely
+
+      // Refresh layout measurements after assets settle
       setTimeout(() => {
         ScrollTrigger.refresh();
       }, 100);
@@ -84,7 +85,7 @@ export default defineComponent({
         {isLoading.value && <Preloader onLoaded={handlePreloaderLoaded} />}
 
         {/* Global Navigation */}
-        <Navbar />
+        <Navbar activeSection={activeSection.value} />
 
         {/* 1. Background Image Sequence & Atmosphere Layer */}
         <BackgroundLayerController activeSection={activeSection.value} />

@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 
 import ForestSequence from './sequences/forestSequence';
-import FragranceSequence from './sequences/fragranceSrquence';
+import FragranceSequence from './sequences/fragranceSequence';
 import OceanSequence from './sequences/OceanSequence';
 import AmberSequence from './sequences/amberSequence';
 

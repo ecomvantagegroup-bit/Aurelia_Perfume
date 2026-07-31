@@ -10,8 +10,8 @@ export default defineComponent({
     const isMobile = window.innerWidth <= 768;
     const totalFrames = isMobile ? 120 : 250;
     const folder = isMobile
-      ? '/fragrance_sequence/mobile'
-      : '/fragrance_sequence/laptop_and_desktop';
+      ? '/fragrance_notes/mobile'
+      : '/fragrance_notes/laptop_and_desktop';
 
     let images = [];
     let currentFrame = 0;
@@ -51,7 +51,8 @@ export default defineComponent({
       for (let i = 0; i < totalFrames; i++) {
         const img = new Image();
         const paddedIndex = String(i + 1).padStart(4, '0');
-        img.src = `${folder}/${paddedIndex}.jpg`;
+        // Check if your extension is .webp or .jpg in public/fragrance_notes
+        img.src = `${folder}/${paddedIndex}.webp`;
 
         if (i === 0) {
           img.onload = () => {
@@ -76,7 +77,7 @@ export default defineComponent({
       renderFrame(currentFrame);
     };
 
-    // Force canvas re-paint and resize when section becomes active
+    // Repaint on section activation
     watch(
       () => props.isActive,
       (active) => {
@@ -102,8 +103,7 @@ export default defineComponent({
     return () => (
       <canvas
         ref={canvasRef}
-        class="bg-sequence-canvas transition-opacity duration-1000 w-full h-full block"
-        style={{ opacity: props.isActive ? 1 : 0 }}
+        class="w-full h-full block"
       />
     );
   },
