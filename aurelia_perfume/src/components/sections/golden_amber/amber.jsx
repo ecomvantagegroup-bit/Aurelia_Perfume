@@ -8,114 +8,130 @@ gsap.registerPlugin(ScrollTrigger);
 export default defineComponent({
   name: 'GoldenAmberSection',
   setup() {
-    const containerRef = ref(null);
-    const contentRef = ref(null);
+    const sectionRef = ref(null);
+    let ctx = null;
 
-    let scrollTriggerInstance = null;
-
-    const amberHighlights = [
-      { category: 'Environment', detail: 'Sand Dunes & Sunset' },
-      { category: '3D Product', detail: 'Amber Glass Bottle' },
-      { category: 'Atmosphere', detail: 'Dust, Smoke & Light' },
+    const fragrancePyramid = [
+      { category: 'TOP NOTE', detail: 'Warm Spices & Amber Dust' },
+      { category: 'HEART NOTE', detail: 'Smokey Resin & Solar Accord' },
+      { category: 'BASE NOTE', detail: 'Golden Amber & Sandalwood' },
     ];
 
     onMounted(() => {
-      const sectionEl = document.getElementById('sec-amber');
+      const sectionEl = sectionRef.value || document.getElementById('sec-amber');
       if (!sectionEl) return;
 
-      // Pin section to freeze layout in viewport during sequence scroll
-      scrollTriggerInstance = ScrollTrigger.create({
-        trigger: sectionEl,
-        start: 'top top',
-        end: '+=200%',
-        pin: true,
-        scrub: 0.5,
-      });
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionEl,
+            start: 'top top',
+            end: '+=150%',
+            pin: true,
+            scrub: 0.5,
+          },
+        });
 
-      // Entry reveal animation matching the suite pattern
-      if (contentRef.value) {
-        gsap.fromTo(
-          contentRef.value.children,
+        // Midday Solar Sunburst Expansion (Gold/Black theme)
+        tl.fromTo(
+          '.solar-flare',
+          { scale: 0.7, opacity: 0.3 },
+          { scale: 1.4, opacity: 0.85, duration: 1.5, ease: 'power2.out' }
+        )
+        .fromTo(
+          '.midday-dust',
           { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            stagger: 0.15,
-            ease: 'power3.out',
-            delay: 0.2,
-          }
+          { opacity: 0.6, y: -20, duration: 1.5, ease: 'none' },
+          '-=1.5'
+        )
+        .fromTo(
+          '.amber-reveal',
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 1, stagger: 0.2, ease: 'power3.out' },
+          '-=1.2'
+        )
+        .fromTo(
+          '.amber-card',
+          { opacity: 0, y: 30, scale: 0.95 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: 'power2.out' },
+          '-=0.6'
         );
-      }
+      }, sectionEl);
 
       ScrollTrigger.refresh();
     });
 
     onUnmounted(() => {
-      if (scrollTriggerInstance) scrollTriggerInstance.kill();
+      if (ctx) ctx.revert();
     });
 
     return () => (
       <section
-        ref={containerRef}
-        id="world-amber"
-        class="amber-section-container relative min-h-screen w-full flex items-center justify-between px-8 md:px-16 lg:px-24 bg-transparent select-none pointer-events-none"
+        ref={sectionRef}
+        id="sec-amber"
+        class="amber-section-container relative min-h-screen w-full flex items-center justify-between px-8 md:px-16 lg:px-24 bg-transparent select-none overflow-hidden"
       >
-        {/* Glow Overlay */}
-        <div class="amber-radial-glow pointer-events-none" />
+        {/* Midday Desert Sunburst Glow (Warm Gold to Dark Gradient) */}
+        <div class="solar-flare pointer-events-none absolute top-[-10%] right-[15%] w-[650px] h-[650px] rounded-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-amber-400/40 via-amber-600/15 to-transparent blur-3xl opacity-0 z-0" />
 
-        {/* Primary Content Left Column */}
-        <div ref={contentRef} class="max-w-lg z-10 space-y-6">
-          <div class="flex items-center space-x-3">
-            <span class="h-[1px] w-8 bg-amber-400/60" />
-            <p class="text-xs font-mono uppercase tracking-[0.3em] text-amber-300/80">
-              07 — GOLDEN AMBER
+        {/* Subtle Ambient Dust Layer */}
+        <div class="midday-dust pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-600/10 via-black/10 to-transparent blur-2xl z-0" />
+
+        {/* Left Column: Gold & Black Typography */}
+        <div class="max-w-xl z-10 space-y-8">
+          <div class="amber-reveal space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="h-[1px] w-8 bg-amber-500" />
+              <p class="text-xs font-mono uppercase tracking-[0.3em] font-semibold text-black drop-shadow-sm">
+                07 — Fragrance Chapter
+              </p>
+            </div>
+
+            {/* Black & Gold Metallic Title */}
+            <h1 class="text-6xl md:text-8xl font-extralight tracking-tight text-black font-serif leading-none drop-shadow-sm">
+              Golden <br />
+              <span class="italic font-normal bg-gradient-to-r from-amber-500 via-amber-300 to-yellow-600 bg-clip-text text-transparent drop-shadow">
+                Amber
+              </span>
+            </h1>
+          </div>
+
+          <div class="amber-reveal space-y-2">
+            <span class="text-[10px] font-mono tracking-[0.25em] font-bold text-amber-600 uppercase">
+              Fragrance Character
+            </span>
+            <p class="text-base md:text-lg font-light tracking-[0.2em] text-black font-serif uppercase">
+              Warm / Sensual / Rich
             </p>
           </div>
 
-          <h1 class="text-5xl md:text-7xl font-extralight tracking-tight text-white font-serif leading-none">
-            Golden <br />
-            <span class="italic font-normal bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
-              Amber
-            </span>
-          </h1>
+          <p class="amber-reveal text-sm md:text-base text-stone-900 leading-relaxed font-normal max-w-md backdrop-blur-[4px] bg-black/5 p-4 rounded-xl border border-black/10 shadow-sm">
+            Immersed in midday desert heat. Resinous warmth enveloped in golden sunbeams, subtle floating smoke, and warm reflections captured under intense solar rays.
+          </p>
 
-          <div class="flex items-center space-x-2 pt-2">
+          <div class="amber-reveal flex space-x-3">
             {['Warm', 'Sensual', 'Rich'].map((tag) => (
               <span
                 key={tag}
-                class="px-3 py-1 text-[10px] font-mono tracking-widest uppercase rounded-full border border-amber-400/20 bg-amber-950/20 text-amber-200 backdrop-blur-md"
+                class="px-3 py-1 text-[10px] font-mono tracking-widest uppercase rounded-full border border-amber-500/40 bg-black text-amber-400 font-medium backdrop-blur-md shadow-md"
               >
                 {tag}
               </span>
             ))}
           </div>
-
-          <p class="text-sm md:text-base text-slate-300/80 leading-relaxed font-light">
-            The climax of the fragrance journey. Deep resinous warmth enveloped in golden dust, glowing light, and the raw elegance of sunset dunes.
-          </p>
-
-          <div class="pt-4 pointer-events-auto">
-            <button class="group relative inline-flex items-center space-x-4 px-6 py-3 rounded-full border border-amber-300/30 bg-amber-950/10 hover:bg-amber-500/10 backdrop-blur-md transition-all duration-300">
-              <span class="text-xs font-mono tracking-widest uppercase text-amber-100">
-                Experience Climax Note
-              </span>
-              <span class="w-2 h-2 rounded-full bg-amber-400 group-hover:scale-125 transition-transform duration-300" />
-            </button>
-          </div>
         </div>
 
-        {/* Secondary Spec Cards Right Column */}
-        <div class="hidden lg:flex flex-col space-y-4 max-w-xs z-10 pointer-events-auto">
-          {amberHighlights.map((item) => (
+        {/* Right Column: Deep Obsidian Glass Cards with Gold Accents */}
+        <div class="hidden lg:flex flex-col space-y-4 w-full max-w-xs z-10 pointer-events-auto">
+          {fragrancePyramid.map((item) => (
             <div
               key={item.category}
-              class="p-5 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-md hover:border-amber-400/30 transition-all duration-300 group"
+              class="amber-card p-5 rounded-2xl border border-amber-500/30 bg-black/90 text-white backdrop-blur-xl shadow-2xl transition-all duration-300 hover:border-amber-400 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]"
             >
-              <span class="text-[10px] font-mono uppercase tracking-widest text-amber-400/80 block mb-1">
+              <span class="text-[10px] font-mono uppercase tracking-[0.25em] text-amber-400 font-semibold block mb-1">
                 {item.category}
               </span>
-              <p class="text-xs font-light text-slate-200 group-hover:text-white transition-colors">
+              <p class="text-xs md:text-sm font-light text-stone-200 tracking-wide">
                 {item.detail}
               </p>
             </div>

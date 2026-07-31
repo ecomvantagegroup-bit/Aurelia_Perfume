@@ -8,112 +8,104 @@ gsap.registerPlugin(ScrollTrigger);
 export default defineComponent({
   name: 'FragranceNotes',
   setup() {
-    const containerRef = ref(null);
-    const textGroupRef = ref(null);
-
-    let scrollTriggerInstance = null;
+    const sectionRef = ref(null);
+    let ctx = null;
 
     const fragrancePyramid = [
-      { category: '01 / Top Note', title: 'Bergamot', tag: 'Fresh' },
-      { category: '02 / Heart Note', title: 'Cedar Leaf', tag: 'Botanical' },
-      { category: '03 / Base Note', title: 'Moss', tag: 'Earthy' },
+      { category: 'TOP NOTE', detail: 'Bergamot', width: 'w-full' },
+      { category: 'HEART NOTE', detail: 'Cedar Leaf', width: 'w-[88%]' },
+      { category: 'BASE NOTE', detail: 'Moss', width: 'w-[75%]' },
     ];
 
     onMounted(() => {
-      const sectionEl = document.getElementById('sec-notes');
+      const sectionEl = sectionRef.value || document.getElementById('sec-notes');
       if (!sectionEl) return;
 
-      // Pin the section during scroll to match OceanBloom behavior
-      scrollTriggerInstance = ScrollTrigger.create({
-        trigger: sectionEl,
-        start: 'top top',
-        end: '+=200%',
-        pin: true,
-        scrub: 0.5,
-      });
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionEl,
+            start: 'top top',
+            end: '+=180%',
+            pin: true,
+            scrub: 0.5,
+          },
+        });
 
-      // Entry reveal animation
-      if (textGroupRef.value) {
-        gsap.fromTo(
-          textGroupRef.value.children,
+        // Crisp Forest Sunrise Aura Expansion
+        tl.fromTo(
+          '.forest-aura',
+          { scale: 0.5, opacity: 0 },
+          { scale: 1.3, opacity: 0.85, duration: 1.5, ease: 'power2.out' }
+        )
+        .fromTo(
+          '.pyramid-header',
           { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            stagger: 0.15,
-            ease: 'power3.out',
-            delay: 0.2,
-          }
+          { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+          '-=1.2'
+        )
+        .fromTo(
+          '.pyramid-tier',
+          { opacity: 0, scaleX: 0.7, y: 20 },
+          { opacity: 1, scaleX: 1, y: 0, duration: 1, stagger: 0.2, ease: 'power2.out' },
+          '-=0.6'
         );
-      }
+      }, sectionEl);
 
       ScrollTrigger.refresh();
     });
 
     onUnmounted(() => {
-      if (scrollTriggerInstance) scrollTriggerInstance.kill();
+      if (ctx) ctx.revert();
     });
 
     return () => (
       <section
-        ref={containerRef}
-        id="world-notes"
-        class="notes-section-container relative min-h-screen w-full flex items-center justify-between px-8 md:px-16 lg:px-24 bg-transparent pointer-events-none select-none"
+        ref={sectionRef}
+        id="sec-notes"
+        class="notes-section-container relative min-h-screen w-full flex flex-col justify-center items-center px-6 md:px-16 bg-transparent select-none overflow-hidden"
       >
-        {/* Left Primary Editorial Content */}
-        <div ref={textGroupRef} class="max-w-lg z-10 space-y-6">
-          <div class="flex items-center space-x-3">
-            <span class="h-[1px] w-8 bg-emerald-400/60" />
-            <p class="text-xs font-mono uppercase tracking-[0.3em] text-emerald-300/80">
-              04 — SPECIFICATION
+        {/* Crisp Emerald & White Sunrise Aura */}
+        <div class="forest-aura pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[450px] md:w-[900px] md:h-[600px] rounded-full bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-emerald-400/20 via-white/10 to-transparent blur-3xl opacity-0 z-0" />
+
+        <div class="max-w-3xl w-full z-10 flex flex-col items-center space-y-8">
+          <div class="pyramid-header text-center space-y-3">
+            <p class="text-xs font-mono uppercase tracking-[0.3em] text-emerald-200/90 font-medium">
+              04 — Specification
+            </p>
+
+            {/* Crisp Premium White & Emerald Gradient Title */}
+            <h1 class="text-4xl md:text-6xl font-extralight tracking-tight text-white font-serif">
+              Forest <span class="italic font-normal bg-gradient-to-r from-white via-emerald-100 to-emerald-300 bg-clip-text text-transparent">Essence</span>
+            </h1>
+
+            <p class="text-xs md:text-sm font-mono tracking-[0.25em] text-emerald-100/80 uppercase pt-1 font-light">
+              Fresh / Botanical / Earthy
             </p>
           </div>
 
-          <h1 class="text-5xl md:text-7xl font-extralight tracking-tight text-white font-serif leading-none">
-            Forest <br />
-            <span class="italic font-normal bg-gradient-to-r from-emerald-200 via-teal-300 to-green-400 bg-clip-text text-transparent">
-              Essence
-            </span>
-          </h1>
-
-          <div class="flex items-center space-x-2 pt-2">
-            {['Fresh', 'Botanical', 'Earthy'].map((tag) => (
-              <span
-                key={tag}
-                class="px-3 py-1 text-[10px] font-mono tracking-widest uppercase rounded-full border border-emerald-400/20 bg-emerald-950/20 text-emerald-200 backdrop-blur-md"
+          {/* Premium Emerald & White Frosted Cards */}
+          <div class="w-full flex flex-col items-center space-y-4 pointer-events-auto">
+            {fragrancePyramid.map((note) => (
+              <div
+                key={note.category}
+                class={`pyramid-tier ${note.width} p-5 rounded-2xl border border-white/20 bg-emerald-950/40 backdrop-blur-xl text-center shadow-lg transition-all duration-300 hover:border-emerald-300/60 hover:bg-emerald-900/50 hover:shadow-[0_0_30px_rgba(52,211,153,0.15)]`}
               >
-                {tag}
-              </span>
+                <span class="text-[10px] font-mono uppercase tracking-[0.25em] text-emerald-300 font-semibold block mb-1">
+                  {note.category}
+                </span>
+                <p class="text-sm md:text-base font-light text-white tracking-wide">
+                  {note.detail}
+                </p>
+              </div>
             ))}
           </div>
 
-          <p class="text-sm md:text-base text-slate-300/80 leading-relaxed font-light">
-            An immersive botanical depth. Crisp top notes of Italian bergamot layered over rich cedar leaf and grounded in deep forest moss.
-          </p>
-
-          <div class="flex items-center justify-between max-w-xs text-[10px] font-mono tracking-[0.2em] text-emerald-400/80 uppercase pt-4 border-t border-emerald-500/10">
+          <div class="pyramid-header flex items-center justify-between w-full max-w-md text-[10px] font-mono tracking-[0.2em] text-emerald-100/70 uppercase pt-4 border-t border-emerald-400/20">
             <span>Vol. 100ML</span>
             <span>Eau De Parfum</span>
             <span>75% VOL.</span>
           </div>
-        </div>
-
-        {/* Right Olfactory Pyramid Cards */}
-        <div class="hidden lg:flex flex-col space-y-4 max-w-xs z-10 pointer-events-auto">
-          {fragrancePyramid.map((note) => (
-            <div
-              key={note.category}
-              class="p-5 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-md hover:border-emerald-400/30 transition-all duration-300 group"
-            >
-              <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-400/80 block mb-1">
-                {note.category}
-              </span>
-              <p class="text-sm font-light tracking-widest uppercase text-slate-200 group-hover:text-white transition-colors">
-                {note.title}
-              </p>
-            </div>
-          ))}
         </div>
       </section>
     );

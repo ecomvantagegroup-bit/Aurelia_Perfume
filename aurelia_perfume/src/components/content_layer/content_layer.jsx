@@ -1,4 +1,4 @@
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted, nextTick } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -17,10 +17,15 @@ export default defineComponent({
     const sequenceWrapperRef = ref(null);
     let triggerInstance = null;
 
-    onMounted(() => {
+    const initMasterSequence = () => {
       if (!sequenceWrapperRef.value) return;
 
-      // Master continuous trigger spanning Forest -> Notes -> Ocean -> AureliaStory
+      // Kill previous instance if re-initializing
+      if (triggerInstance) {
+        triggerInstance.kill();
+      }
+
+      // Master continuous trigger spanning Forest -> Notes -> Ocean -> AureliaStory -> GoldenAmber
       triggerInstance = ScrollTrigger.create({
         trigger: sequenceWrapperRef.value,
         start: 'top top',
@@ -34,20 +39,35 @@ export default defineComponent({
           );
         },
       });
+    };
+
+    onMounted(async () => {
+      await nextTick();
+
+      // Initialize the master continuous scroll trigger
+      initMasterSequence();
+
+      // Delay refresh slightly to allow child section triggers (pinning) to complete mounting
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
     });
 
     onUnmounted(() => {
-      if (triggerInstance) triggerInstance.kill();
+      if (triggerInstance) {
+        triggerInstance.kill();
+        triggerInstance = null;
+      }
     });
 
     return () => (
       <div class="relative z-30 w-full pointer-events-auto">
-        {/* 01 — Hero Section (Standalone Premium Black & Gold style) */}
+        {/* 01 — Hero Section (Standalone Premium Style) */}
         <div id="sec-hero" class="relative z-10 bg-black text-amber-400">
           <HeroSection />
         </div>
 
-        {/* 02-05 — Master Continuous Canvas Sequence Container */}
+        {/* 02-06 — Master Continuous Canvas Sequence Container */}
         <div ref={sequenceWrapperRef} class="relative w-full">
           <div id="sec-forest">
             <ForestEssence />
@@ -68,8 +88,7 @@ export default defineComponent({
           <div id="sec-amber">
             <GoldenAmber />
           </div>
-          
-        </div>  
+        </div>
       </div>
     );
   },
