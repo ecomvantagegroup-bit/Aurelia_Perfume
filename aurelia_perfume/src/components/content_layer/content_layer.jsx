@@ -6,6 +6,7 @@ import HeroSection from '../sections/hero/hero';
 import ForestEssence from '../sections/forest_essence/forest_essence';
 import FragranceNotes from '../sections/fragrance_notes/fragrance_notes';
 import OceanBloom from '../sections/ocean_bloom/ocean_bloom';
+import AureliaStory from '../sections/aurelia_story/aurelia_story';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,7 +19,7 @@ export default defineComponent({
     onMounted(() => {
       if (!sequenceWrapperRef.value) return;
 
-      // Master continuous trigger spanning Forest -> Notes -> Ocean
+      // Master continuous trigger spanning Forest -> Notes -> Ocean -> AureliaStory
       triggerInstance = ScrollTrigger.create({
         trigger: sequenceWrapperRef.value,
         start: 'top top',
@@ -45,7 +46,7 @@ export default defineComponent({
           <HeroSection />
         </div>
 
-        {/* 02-04 — Master Continuous Canvas Sequence Container */}
+        {/* 02-05 — Master Continuous Canvas Sequence Container */}
         <div ref={sequenceWrapperRef} class="relative w-full">
           <div id="sec-forest">
             <ForestEssence />
@@ -57,6 +58,10 @@ export default defineComponent({
 
           <div id="sec-ocean">
             <OceanBloom />
+          </div>
+
+          <div id="sec-story">
+            <AureliaStory />
           </div>
         </div>
       </div>

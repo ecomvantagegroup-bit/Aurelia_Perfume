@@ -1,0 +1,12 @@
+@reference "@style.css";
+
+.story-section-container {
+  background-color: transparent !important;
+  mix-blend-mode: normal;
+}
+
+/* Base state for GSAP text reveals */
+.story-reveal {
+  will-change: transform, opacity;
+  opacity: 0;
+}

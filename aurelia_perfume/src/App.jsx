@@ -22,7 +22,9 @@ export default defineComponent({
 
     const handlePreloaderLoaded = () => {
       isLoading.value = false;
-      nextTick(() => ScrollTrigger.refresh());
+      nextTick(() => {
+        ScrollTrigger.refresh();
+      });
     };
 
     const initScrollTriggers = () => {
@@ -30,20 +32,19 @@ export default defineComponent({
       scrollTriggers.forEach((st) => st.kill());
       scrollTriggers = [];
 
-      // Array matching all sections in ContentLayer
+      // Array matching all sections rendered inside ContentLayer
       const sections = [
         { id: 'sec-hero', key: 'hero' },
         { id: 'sec-forest', key: 'forest' },
         { id: 'sec-notes', key: 'notes' },
         { id: 'sec-ocean', key: 'ocean' },
-        { id: 'sec-amber', key: 'amber' },
+        { id: 'sec-story', key: 'story' },
       ];
 
       sections.forEach(({ id, key }, index) => {
         const el = document.getElementById(id);
         if (!el) return;
 
-        // Give the last section a broader start trigger so it always registers
         const isLastSection = index === sections.length - 1;
         const startPoint = isLastSection ? 'top 85%' : 'top 50%';
         const endPoint = isLastSection ? 'bottom bottom' : 'bottom 50%';
