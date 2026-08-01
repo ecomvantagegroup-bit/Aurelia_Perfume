@@ -20,10 +20,11 @@ export default defineComponent({
     const storyFrames = isMobile ? 96 : 240;
     const amberFrames = isMobile ? 120 : 250;
     const collectionFrames = isMobile ? 96 : 240;
+    const ctaFrames = isMobile ? 96 : 240;
 
     // Combined total frame count: Mobile = 648, Desktop = 1324
     const totalFrames =
-      forestFrames + notesFrames + oceanFrames + storyFrames + amberFrames + collectionFrames;
+      forestFrames + notesFrames + oceanFrames + storyFrames + amberFrames + collectionFrames + ctaFrames;
 
     const images = [];
     let currentFrame = 0;
@@ -88,6 +89,9 @@ export default defineComponent({
       const collectionFolder = isMobile
         ? '/collection/mobile'
         : '/collection/laptop_and_desktop';
+      const ctaFolder = isMobile
+        ? '/cta/mobile'
+        : '/cta/laptop_and_desktop';
 
       // 1. Forest Essence frames
       for (let i = 0; i < forestFrames; i++) {
@@ -128,6 +132,13 @@ export default defineComponent({
       for (let i = 0; i < collectionFrames; i++) {
         const img = new Image();
         img.src = `${collectionFolder}/${String(i + 1).padStart(4, '0')}.webp`;
+        images.push(img);
+      }
+
+      // 7. CTA frames
+      for (let i = 0; i < ctaFrames; i++) {
+        const img = new Image();
+        img.src = `${ctaFolder}/${String(i + 1).padStart(4, '0')}.webp`;
         images.push(img);
       }
     };
