@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pinning & GPU Acceleration Enhancements */
+.collection-section {
+  will-change: transform, opacity;
+  box-sizing: border-box;
+}
+
+/* Ensure GSAP pin-spacer containers don't overflow horizontally */
+.pin-spacer {
+  pointer-events: none !important;
+}
+
+.pin-spacer > * {
+  pointer-events: auto !important;
+}
+
+.collection-card {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Card hover scaling to match 3D camera pull-back focus */
+.collection-card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* Bottle anchor placeholder styling */
+.bottle-viewport-anchor {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
+}

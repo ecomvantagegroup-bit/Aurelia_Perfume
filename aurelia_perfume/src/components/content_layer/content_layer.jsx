@@ -8,6 +8,7 @@ import FragranceNotes from '../sections/fragrance_notes/fragrance_notes';
 import OceanBloom from '../sections/ocean_bloom/ocean_bloom';
 import AureliaStory from '../sections/aurelia_story/aurelia_story';
 import GoldenAmber from '../sections/golden_amber/amber';
+import Collection from '../sections/collection/collection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,7 +26,7 @@ export default defineComponent({
         triggerInstance.kill();
       }
 
-      // Master continuous trigger spanning Forest -> Notes -> Ocean -> AureliaStory -> GoldenAmber
+      // Master continuous trigger spanning Forest -> Notes -> Ocean -> AureliaStory -> GoldenAmber -> Collection
       triggerInstance = ScrollTrigger.create({
         trigger: sequenceWrapperRef.value,
         start: 'top top',
@@ -50,7 +51,7 @@ export default defineComponent({
       // Delay refresh slightly to allow child section triggers (pinning) to complete mounting
       setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 100);
+      }, 150);
     });
 
     onUnmounted(() => {
@@ -67,7 +68,7 @@ export default defineComponent({
           <HeroSection />
         </div>
 
-        {/* 02-06 — Master Continuous Canvas Sequence Container */}
+        {/* 02-07 — Master Continuous Canvas Sequence Container */}
         <div ref={sequenceWrapperRef} class="relative w-full">
           <div id="sec-forest">
             <ForestEssence />
@@ -87,6 +88,10 @@ export default defineComponent({
 
           <div id="sec-amber">
             <GoldenAmber />
+          </div>
+
+          <div id="sec-collection" class="relative w-full">
+            <Collection />
           </div>
         </div>
       </div>

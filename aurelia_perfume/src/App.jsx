@@ -28,7 +28,7 @@ export default defineComponent({
     };
 
     const initScrollTriggers = () => {
-      // Clear previous triggers
+      // Clear previous triggers safely
       scrollTriggers.forEach((st) => st.kill());
       scrollTriggers = [];
 
@@ -40,20 +40,19 @@ export default defineComponent({
         { id: 'sec-ocean', key: 'ocean' },
         { id: 'sec-story', key: 'story' },
         { id: 'sec-amber', key: 'amber' },
+        { id: 'sec-collection', key: 'collection' },
       ];
 
-      sections.forEach(({ id, key }, index) => {
+      sections.forEach(({ id, key }) => {
         const el = document.getElementById(id);
         if (!el) return;
 
-        const isLastSection = index === sections.length - 1;
-        const startPoint = isLastSection ? 'top 85%' : 'top 50%';
-        const endPoint = isLastSection ? 'bottom bottom' : 'bottom 50%';
+        const isCollection = key === 'collection';
 
         const trigger = ScrollTrigger.create({
           trigger: el,
-          start: startPoint,
-          end: endPoint,
+          start: isCollection ? 'top top' : 'top 50%',
+          end: isCollection ? 'bottom top' : 'bottom 50%',
           onEnter: () => {
             activeSection.value = key;
           },
@@ -70,10 +69,10 @@ export default defineComponent({
       await nextTick();
       initScrollTriggers();
 
-      // Refresh layout measurements after assets settle
+      // Refresh layout measurements after child component DOM nodes settle
       setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 100);
+      }, 200);
     });
 
     onUnmounted(() => {
