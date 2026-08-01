@@ -41,6 +41,8 @@ export default defineComponent({
         { id: 'sec-story', key: 'story' },
         { id: 'sec-amber', key: 'amber' },
         { id: 'sec-collection', key: 'collection' },
+        { id: 'sec-cta', key: 'cta' },
+        { id: 'sec-footer', key: 'footer' },
       ];
 
       sections.forEach(({ id, key }) => {

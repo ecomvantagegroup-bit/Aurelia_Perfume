@@ -9,6 +9,8 @@ import OceanBloom from '../sections/ocean_bloom/ocean_bloom';
 import AureliaStory from '../sections/aurelia_story/aurelia_story';
 import GoldenAmber from '../sections/golden_amber/amber';
 import Collection from '../sections/collection/collection';
+import Cta from '../sections/cta/cta';
+import Footer from '../sections/footer/footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -93,6 +95,15 @@ export default defineComponent({
           <div id="sec-collection" class="relative w-full">
             <Collection />
           </div>
+
+          <div id="sec-cta" class="relative w-full">
+            <Cta />
+          </div>
+
+          <div id="sec-footer" class="relative w-full">
+            <Footer />
+          </div>
+
         </div>
       </div>
     );

@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Section Pinning & Hardware Acceleration */
+.cta-section {
+  will-change: transform, opacity;
+  background-color: transparent !important;
+  box-sizing: border-box;
+}
+
+/* Ensure pinning wrappers don't block pointer interaction */
+.pin-spacer {
+  pointer-events: none !important;
+}
+
+.pin-spacer > * {
+  pointer-events: auto !important;
+}
+
+/* Typography Reveal Letter-Spacing Transition */
+.cta-heading-line {
+  will-change: transform, opacity, letter-spacing;
+  text-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
+}
+
+/* Magnetic Button Glass & Shadow Physics */
+.cta-magnetic-btn {
+  will-change: transform;
+  transform-style: preserve-3d;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtle Hover Reflection Glow */
+.cta-magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.cta-magnetic-btn:hover::before {
+  opacity: 1;
+}

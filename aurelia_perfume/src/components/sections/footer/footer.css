@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.footer-section {
+  will-change: transform, opacity;
+  /* Premium tactile matte background texture */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Watermark typography shadow */
+.footer-brand-title {
+  will-change: transform, opacity, letter-spacing;
+  text-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+}
+
+/* Minimal hover underline animation */
+.footer-link {
+  position: relative;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background-color: #fde68a; /* amber-200 */
+  transition: width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.footer-link:hover::after {
+  width: 100%;
+}
