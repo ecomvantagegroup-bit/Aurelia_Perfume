@@ -23,17 +23,15 @@ export default defineComponent({
     const initMasterSequence = () => {
       if (!sequenceWrapperRef.value) return;
 
-      // Kill previous instance if re-initializing
-      if (triggerInstance) {
-        triggerInstance.kill();
-      }
+      if (triggerInstance) triggerInstance.kill();
 
-      // Master continuous trigger spanning Forest -> Notes -> Ocean -> AureliaStory -> GoldenAmber -> Collection
+      // Master continuous trigger ONLY spanning image sequence sections (Forest -> CTA)
       triggerInstance = ScrollTrigger.create({
         trigger: sequenceWrapperRef.value,
         start: 'top top',
         end: 'bottom bottom',
         scrub: true,
+        invalidateOnRefresh: true,
         onUpdate: (self) => {
           window.dispatchEvent(
             new CustomEvent('global-sequence-progress', {
@@ -47,13 +45,11 @@ export default defineComponent({
     onMounted(async () => {
       await nextTick();
 
-      // Initialize the master continuous scroll trigger
-      initMasterSequence();
-
-      // Delay refresh slightly to allow child section triggers (pinning) to complete mounting
+      // Allow child section pins (e.g. CTA, Collection) to initialize first
       setTimeout(() => {
+        initMasterSequence();
         ScrollTrigger.refresh();
-      }, 150);
+      }, 200);
     });
 
     onUnmounted(() => {
@@ -65,45 +61,25 @@ export default defineComponent({
 
     return () => (
       <div class="relative z-30 w-full pointer-events-auto">
-        {/* 01 — Hero Section (Standalone Premium Style) */}
+        {/* 01 — Standalone Hero */}
         <div id="sec-hero" class="relative z-10 bg-black text-amber-400">
           <HeroSection />
         </div>
 
-        {/* 02-07 — Master Continuous Canvas Sequence Container */}
+        {/* 02-09 — Master Continuous Canvas Sequence Container */}
         <div ref={sequenceWrapperRef} class="relative w-full">
-          <div id="sec-forest">
-            <ForestEssence />
-          </div>
+          <div id="sec-forest"><ForestEssence /></div>
+          <div id="sec-notes"><FragranceNotes /></div>
+          <div id="sec-ocean"><OceanBloom /></div>
+          <div id="sec-story"><AureliaStory /></div>
+          <div id="sec-amber"><GoldenAmber /></div>
+          <div id="sec-collection" class="relative w-full"><Collection /></div>
+          <div id="sec-cta" class="relative w-full"><Cta /></div>
+        </div>
 
-          <div id="sec-notes">
-            <FragranceNotes />
-          </div>
-
-          <div id="sec-ocean">
-            <OceanBloom />
-          </div>
-
-          <div id="sec-story">
-            <AureliaStory />
-          </div>
-
-          <div id="sec-amber">
-            <GoldenAmber />
-          </div>
-
-          <div id="sec-collection" class="relative w-full">
-            <Collection />
-          </div>
-
-          <div id="sec-cta" class="relative w-full">
-            <Cta />
-          </div>
-
-          <div id="sec-footer" class="relative w-full">
-            <Footer />
-          </div>
-
+        {/* 10 — Standalone Footer */}
+        <div id="sec-footer" class="relative z-20 w-full bg-[#050507]">
+          <Footer />
         </div>
       </div>
     );
