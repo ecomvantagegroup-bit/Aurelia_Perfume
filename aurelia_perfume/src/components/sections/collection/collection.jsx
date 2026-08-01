@@ -20,8 +20,8 @@ export default defineComponent({
         borderHover: 'hover:border-emerald-400/50 hover:shadow-[0_0_35px_rgba(16,185,129,0.2)]',
         badgeClass: 'text-emerald-300 border-emerald-500/30 bg-emerald-950/40',
         ctaHover: 'hover:bg-emerald-500 hover:text-black',
-        // Top-center bottle positioning in 3D pyramid
-        positionClass: 'col-span-1 md:col-span-2 lg:col-span-1 lg:col-start-2 order-1',
+        // Pyramid top on mobile/tablet (col-span-2 centered), side-by-side 1st item on desktop
+        responsiveClass: 'col-span-2 md:col-span-2 lg:col-span-1 order-1',
       },
       {
         id: '02',
@@ -31,8 +31,8 @@ export default defineComponent({
         borderHover: 'hover:border-indigo-400/50 hover:shadow-[0_0_35px_rgba(99,102,241,0.2)]',
         badgeClass: 'text-indigo-300 border-indigo-500/30 bg-indigo-950/40',
         ctaHover: 'hover:bg-indigo-400 hover:text-black',
-        // Bottom-left bottle positioning in 3D pyramid
-        positionClass: 'col-span-1 order-2 lg:order-2',
+        // Pyramid bottom-left on mobile/tablet, side-by-side 2nd item on desktop
+        responsiveClass: 'col-span-1 md:col-span-1 lg:col-span-1 order-2',
       },
       {
         id: '03',
@@ -42,8 +42,8 @@ export default defineComponent({
         borderHover: 'hover:border-amber-400/50 hover:shadow-[0_0_35px_rgba(245,158,11,0.2)]',
         badgeClass: 'text-amber-300 border-amber-500/30 bg-amber-950/40',
         ctaHover: 'hover:bg-amber-400 hover:text-black',
-        // Bottom-right bottle positioning in 3D pyramid
-        positionClass: 'col-span-1 order-3 lg:order-3',
+        // Pyramid bottom-right on mobile/tablet, side-by-side 3rd item on desktop
+        responsiveClass: 'col-span-1 md:col-span-1 lg:col-span-1 order-3',
       },
     ];
 
@@ -52,7 +52,7 @@ export default defineComponent({
       if (!sectionEl) return;
 
       ctx = gsap.context(() => {
-        // Timeline that pins on enter and unpins cleanly on exit
+        // ScrollTrigger with clean pin/unpin timeline
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionEl,
@@ -117,19 +117,19 @@ export default defineComponent({
           </p>
         </div>
 
-        {/* 3-Bottle Triangular Layout Grid */}
-        <div class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-auto z-10 py-8">
+        {/* Grid Container: Pyramid on Mobile/Tablet (2-col grid), Side-by-Side on Desktop (3-col grid) */}
+        <div class="w-full max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 my-auto z-10 py-6">
           {collectionData.map((item) => (
             <div
               key={item.id}
-              class={`collection-card group relative p-6 md:p-8 rounded-2xl border border-white/10 bg-slate-950/40 backdrop-blur-xl transition-all duration-500 ease-out flex flex-col justify-between min-h-[260px] pointer-events-auto ${item.positionClass} ${item.borderHover}`}
+              class={`collection-card group relative p-5 md:p-8 rounded-2xl border border-white/10 bg-slate-950/40 backdrop-blur-xl transition-all duration-500 ease-out flex flex-col justify-between min-h-[240px] md:min-h-[280px] pointer-events-auto ${item.responsiveClass} ${item.borderHover}`}
             >
               {/* Inner Soft Glow */}
               <div
                 class={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.bgGlow} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
               />
 
-              <div class="space-y-4 z-10">
+              <div class="space-y-3 md:space-y-4 z-10">
                 <div class="flex items-center justify-between">
                   <span
                     class={`px-2.5 py-0.5 text-[10px] font-mono tracking-widest uppercase rounded-full border ${item.badgeClass}`}
@@ -137,30 +137,30 @@ export default defineComponent({
                     {item.id}
                   </span>
                   <span class="text-[10px] font-mono tracking-widest text-slate-400/80 uppercase">
-                    100 ML / 3.4 FL. OZ.
+                    100 ML
                   </span>
                 </div>
 
                 {/* Subtly Shifting Title & Subtitle */}
                 <div class="transition-transform duration-300 group-hover:-translate-y-1">
-                  <h3 class="text-2xl md:text-3xl font-serif font-light text-white tracking-wide">
+                  <h3 class="text-xl md:text-3xl font-serif font-light text-white tracking-wide">
                     {item.title}
                   </h3>
-                  <p class="text-xs font-mono tracking-wider text-slate-300/70 pt-1 uppercase">
+                  <p class="text-[10px] md:text-xs font-mono tracking-wider text-slate-300/70 pt-1 uppercase">
                     {item.subtitle}
                   </p>
                 </div>
               </div>
 
-              {/* 3D Bottle Viewport Marker (Placeholder for canvas anchoring) */}
-              <div class="bottle-viewport-anchor my-4 h-12 w-full flex items-center justify-center border border-dashed border-white/10 rounded-lg text-[10px] font-mono text-slate-500 uppercase tracking-widest group-hover:border-white/20 transition-colors">
+              {/* 3D Bottle Viewport Marker (Placeholder for WebGL anchoring) */}
+              <div class="bottle-viewport-anchor my-3 md:my-4 h-10 md:h-14 w-full flex items-center justify-center border border-dashed border-white/10 rounded-lg text-[9px] md:text-[10px] font-mono text-slate-500 uppercase tracking-widest group-hover:border-white/20 transition-colors">
                 [ 3D Model Focus Anchor ]
               </div>
 
               {/* Action Button revealed on hover */}
               <div class="z-10 pt-2">
                 <button
-                  class={`w-full py-2.5 px-4 text-xs font-mono uppercase tracking-[0.2em] rounded-xl border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 opacity-80 group-hover:opacity-100 ${item.ctaHover}`}
+                  class={`w-full py-2 md:py-2.5 px-3 text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] rounded-xl border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 opacity-80 group-hover:opacity-100 ${item.ctaHover}`}
                 >
                   Explore World
                 </button>
