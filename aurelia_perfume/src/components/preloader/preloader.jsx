@@ -1,11 +1,24 @@
-import { defineComponent, ref, onMounted, nextTick } from 'vue';
+import { defineComponent, ref, onMounted, watch, nextTick } from 'vue';
 import gsap from 'gsap';
 import './preloader.css';
 
 export default defineComponent({
   name: 'Preloader',
+  props: {
+    // Real 0-100 asset loading progress, reported by the 3D layer.
+    progress: {
+      type: Number,
+      default: 0,
+    },
+    // True once every 3D asset (models, textures, materials, shaders) has
+    // finished loading and is safe to render without further stutter.
+    ready: {
+      type: Boolean,
+      default: false,
+    },
+  },
   emits: ['loaded'],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const progress = ref(0);
     const preloaderRef = ref(null);
     const logoRef = ref(null);
@@ -13,6 +26,106 @@ export default defineComponent({
     const progressTrackRef = ref(null);
     const percentageRef = ref(null);
     const footerRef = ref(null);
+
+    // The number on screen is tweened toward whatever real progress value
+    // just arrived, so it reads as continuous motion rather than jumping
+    // between discrete percentages every time another asset finishes.
+    const displayState = { value: 0 };
+    let hasExited = false;
+
+    // Keeps the preloader visible for at least as long as its own entrance
+    // animation takes, so a fully-cached/instant load still reads as a
+    // deliberate reveal instead of a flash. This is purely a display
+    // *minimum* — it never fakes or blocks the underlying progress value,
+    // it only delays the exit if real loading happens to finish first.
+    const mountedAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    const MIN_DISPLAY_MS = 1800;
+
+    const runExit = () => {
+      if (hasExited) return;
+      hasExited = true;
+
+      // Exit Animation (Fade out into main experience)
+      const exitTl = gsap.timeline({
+        onComplete: () => {
+          emit('loaded');
+        }
+      });
+
+      exitTl
+        .to(
+          [
+            logoRef.value,
+            subtitleRef.value,
+            progressTrackRef.value,
+            percentageRef.value,
+            footerRef.value
+          ],
+          {
+            opacity: 0,
+            y: -15,
+            duration: 0.6,
+            stagger: 0.06,
+            ease: 'power2.in'
+          }
+        )
+        .to(
+          preloaderRef.value,
+          {
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.inOut'
+          },
+          '-=0.2'
+        );
+    };
+
+    const animateDisplayTo = (target, onArrive) => {
+      gsap.to(displayState, {
+        value: target,
+        duration: 0.35,
+        ease: 'power1.out',
+        onUpdate: () => {
+          progress.value = Math.round(displayState.value);
+        },
+        onComplete: () => {
+          if (onArrive) onArrive();
+        },
+      });
+    };
+
+    const attemptExit = () => {
+      if (hasExited) return;
+      const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      const elapsed = now - mountedAt;
+      const wait = Math.max(0, MIN_DISPLAY_MS - elapsed);
+
+      animateDisplayTo(100, () => {
+        if (wait > 0) {
+          gsap.delayedCall(wait / 1000, runExit);
+        } else {
+          runExit();
+        }
+      });
+    };
+
+    watch(
+      () => props.progress,
+      (val) => {
+        if (hasExited || props.ready) return;
+        // Cap under 100 until we get the real "ready" signal, so the bar
+        // never claims completion before shaders/materials are actually
+        // warmed up.
+        animateDisplayTo(Math.min(val, 99));
+      }
+    );
+
+    watch(
+      () => props.ready,
+      (val) => {
+        if (val) attemptExit();
+      }
+    );
 
     onMounted(async () => {
       await nextTick();
@@ -38,52 +151,12 @@ export default defineComponent({
           '-=0.4'
         );
 
-      // Progress Simulation
-      const progressObj = { value: 0 };
-      gsap.to(progressObj, {
-        value: 100,
-        duration: 2.5,
-        delay: 0.5,
-        ease: 'power1.inOut',
-        onUpdate: () => {
-          progress.value = Math.round(progressObj.value);
-        },
-        onComplete: () => {
-          // Exit Animation (Fade out into main experience)
-          const exitTl = gsap.timeline({
-            onComplete: () => {
-              emit('loaded');
-            }
-          });
-
-          exitTl
-            .to(
-              [
-                logoRef.value,
-                subtitleRef.value,
-                progressTrackRef.value,
-                percentageRef.value,
-                footerRef.value
-              ],
-              {
-                opacity: 0,
-                y: -15,
-                duration: 0.6,
-                stagger: 0.06,
-                ease: 'power2.in'
-              }
-            )
-            .to(
-              preloaderRef.value,
-              {
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.inOut'
-              },
-              '-=0.2'
-            );
-        }
-      });
+      // Covers the edge case where assets finished loading before this
+      // component even mounted (e.g. a fully cached repeat visit) — the
+      // watcher above would have already missed its trigger.
+      if (props.ready) {
+        attemptExit();
+      }
     });
 
     return () => (

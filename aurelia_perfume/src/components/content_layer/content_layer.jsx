@@ -25,7 +25,7 @@ export default defineComponent({
 
       if (triggerInstance) triggerInstance.kill();
 
-      // Master continuous trigger ONLY spanning image sequence sections (Forest -> CTA)
+      // Master continuous trigger spanning image sequence sections (Forest -> CTA)
       triggerInstance = ScrollTrigger.create({
         trigger: sequenceWrapperRef.value,
         start: 'top top',
@@ -60,25 +60,40 @@ export default defineComponent({
     });
 
     return () => (
-      <div class="relative z-30 w-full pointer-events-auto">
+      /* Root Layer: Set pointer-events-none so raycasting hits 3D layer behind empty space */
+      <div class="content-layer relative z-30 w-full pointer-events-none">
         {/* 01 — Standalone Hero */}
-        <div id="sec-hero" class="relative z-10 bg-black text-amber-400">
+        <div id="sec-hero" class="relative z-10 bg-black text-amber-400 pointer-events-auto">
           <HeroSection />
         </div>
 
         {/* 02-09 — Master Continuous Canvas Sequence Container */}
         <div ref={sequenceWrapperRef} class="relative w-full">
-          <div id="sec-forest"><ForestEssence /></div>
-          <div id="sec-notes"><FragranceNotes /></div>
-          <div id="sec-ocean"><OceanBloom /></div>
-          <div id="sec-story"><AureliaStory /></div>
-          <div id="sec-amber"><GoldenAmber /></div>
-          <div id="sec-collection" class="relative w-full"><Collection /></div>
-          <div id="sec-cta" class="relative w-full"><Cta /></div>
+          <div id="sec-forest" class="pointer-events-auto">
+            <ForestEssence />
+          </div>
+          <div id="sec-notes" class="pointer-events-auto">
+            <FragranceNotes />
+          </div>
+          <div id="sec-ocean" class="pointer-events-auto">
+            <OceanBloom />
+          </div>
+          <div id="sec-story" class="pointer-events-auto">
+            <AureliaStory />
+          </div>
+          <div id="sec-amber" class="pointer-events-auto">
+            <GoldenAmber />
+          </div>
+          <div id="sec-collection" class="relative w-full pointer-events-auto">
+            <Collection />
+          </div>
+          <div id="sec-cta" class="relative w-full pointer-events-auto">
+            <Cta />
+          </div>
         </div>
 
         {/* 10 — Standalone Footer */}
-        <div id="sec-footer" class="relative z-20 w-full bg-[#050507]">
+        <div id="sec-footer" class="relative z-20 w-full bg-[#050507] pointer-events-auto">
           <Footer />
         </div>
       </div>

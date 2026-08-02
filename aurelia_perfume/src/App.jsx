@@ -1,4 +1,4 @@
-import { defineComponent, ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -20,6 +20,13 @@ export default defineComponent({
     const activeSection = ref('hero');
     let scrollTriggers = [];
 
+    // Real 3D asset loading state, reported by Interactive3DLayer as it
+    // downloads models/textures and warms up shaders. The Preloader uses
+    // this instead of a simulated timer to decide when it's actually safe
+    // to reveal the experience.
+    const assetsProgress = ref(0);
+    const assetsReady = ref(false);
+
     const handlePreloaderLoaded = () => {
       isLoading.value = false;
       nextTick(() => {
@@ -27,12 +34,18 @@ export default defineComponent({
       });
     };
 
+    const handleAssetsProgress = (percent) => {
+      assetsProgress.value = percent;
+    };
+
+    const handleAssetsReady = () => {
+      assetsReady.value = true;
+    };
+
     const initScrollTriggers = () => {
-      // Clear previous triggers safely
       scrollTriggers.forEach((st) => st.kill());
       scrollTriggers = [];
 
-      // Array matching all sections rendered inside ContentLayer
       const sections = [
         { id: 'sec-hero', key: 'hero' },
         { id: 'sec-forest', key: 'forest' },
@@ -71,7 +84,6 @@ export default defineComponent({
       await nextTick();
       initScrollTriggers();
 
-      // Refresh layout measurements after child component DOM nodes settle
       setTimeout(() => {
         ScrollTrigger.refresh();
       }, 200);
@@ -84,20 +96,34 @@ export default defineComponent({
 
     return () => (
       <main class="relative min-h-screen w-full bg-background text-text selection:bg-primary selection:text-black overflow-x-hidden">
-        {/* Preloader Screen */}
-        {isLoading.value && <Preloader onLoaded={handlePreloaderLoaded} />}
+        {/* System Overlays */}
+        {isLoading.value && (
+          <Preloader
+            progress={assetsProgress.value}
+            ready={assetsReady.value}
+            onLoaded={handlePreloaderLoaded}
+          />
+        )}
+        <Navbar activeSection={activeSection.value} class="z-50" />
 
-        {/* Global Navigation */}
-        <Navbar activeSection={activeSection.value} />
+        {/* Layer 1: Background Controller */}
+        <div class="fixed inset-0 z-0 pointer-events-none">
+          <BackgroundLayerController activeSection={activeSection.value} />
+        </div>
 
-        {/* 1. Background Image Sequence & Atmosphere Layer */}
-        <BackgroundLayerController activeSection={activeSection.value} />
+        {/* Layer 2: 3D Canvas Container */}
+        <div class="fixed inset-0 z-20 pointer-events-none">
+          <Interactive3DLayer
+            activeSection={activeSection.value}
+            onAssetsProgress={handleAssetsProgress}
+            onAssetsReady={handleAssetsReady}
+          />
+        </div>
 
-        {/* 2. Interactive WebGL / 3D Canvas Layer */}
-        {/*<Interactive3DLayer activeSection={activeSection.value} />*/}
-
-        {/* 3. HTML Content & DOM Layout Layer */}
-        <ContentLayer />
+        {/* Layer 3: HTML Content Layer (Text, Buttons, Cards) */}
+        <div class="relative z-30 pointer-events-none">
+          <ContentLayer />
+        </div>
       </main>
     );
   },

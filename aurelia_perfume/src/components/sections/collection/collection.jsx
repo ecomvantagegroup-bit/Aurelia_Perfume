@@ -13,26 +13,26 @@ export default defineComponent({
 
     const collectionData = [
       {
-        id: '01',
-        title: 'Forest Essence',
-        subtitle: 'Fresh / Botanical / Earthy',
+        id: '02',
+        title: 'Ocean Bloom',
+        subtitle: 'Aquatic / Mineral / Fresh',
         bgGlow: 'from-emerald-500/20 via-emerald-950/10 to-transparent',
         borderHover: 'hover:border-emerald-400/50 hover:shadow-[0_0_35px_rgba(16,185,129,0.2)]',
         badgeClass: 'text-emerald-300 border-emerald-500/30 bg-emerald-950/40',
         ctaHover: 'hover:bg-emerald-500 hover:text-black',
-        // Pyramid top on mobile/tablet (col-span-2 centered), side-by-side 1st item on desktop
-        responsiveClass: 'col-span-2 md:col-span-2 lg:col-span-1 order-1',
+        modelKey: 'forest',
       },
+     
+        
       {
-        id: '02',
-        title: 'Ocean Bloom',
-        subtitle: 'Aquatic / Mineral / Fresh',
+        id: '01',
+        title: 'Forest Essence', 
+        subtitle: 'Fresh / Botanical / Earthy',
         bgGlow: 'from-indigo-500/20 via-slate-950/10 to-transparent',
         borderHover: 'hover:border-indigo-400/50 hover:shadow-[0_0_35px_rgba(99,102,241,0.2)]',
         badgeClass: 'text-indigo-300 border-indigo-500/30 bg-indigo-950/40',
         ctaHover: 'hover:bg-indigo-400 hover:text-black',
-        // Pyramid bottom-left on mobile/tablet, side-by-side 2nd item on desktop
-        responsiveClass: 'col-span-1 md:col-span-1 lg:col-span-1 order-2',
+        modelKey: 'ocean',
       },
       {
         id: '03',
@@ -42,8 +42,7 @@ export default defineComponent({
         borderHover: 'hover:border-amber-400/50 hover:shadow-[0_0_35px_rgba(245,158,11,0.2)]',
         badgeClass: 'text-amber-300 border-amber-500/30 bg-amber-950/40',
         ctaHover: 'hover:bg-amber-400 hover:text-black',
-        // Pyramid bottom-right on mobile/tablet, side-by-side 3rd item on desktop
-        responsiveClass: 'col-span-1 md:col-span-1 lg:col-span-1 order-3',
+        modelKey: 'amber',
       },
     ];
 
@@ -117,12 +116,17 @@ export default defineComponent({
           </p>
         </div>
 
-        {/* Grid Container: Pyramid on Mobile/Tablet (2-col grid), Side-by-Side on Desktop (3-col grid) */}
-        <div class="w-full max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 my-auto z-10 py-6">
+        {/*
+          Column count comes entirely from the .collection-grid CSS Grid
+          rules in collection.css (1 col mobile / 2 tablet / 3 desktop).
+          Only spacing/sizing utilities (max-width, centering, gap) live
+          here — there's a single source of truth for the column layout.
+        */}
+        <div class="collection-grid w-full max-w-6xl mx-auto gap-4 md:gap-6 my-auto z-10 py-6">
           {collectionData.map((item) => (
             <div
               key={item.id}
-              class={`collection-card group relative p-5 md:p-8 rounded-2xl border border-white/10 bg-slate-950/40 backdrop-blur-xl transition-all duration-500 ease-out flex flex-col justify-between min-h-[240px] md:min-h-[280px] pointer-events-auto ${item.responsiveClass} ${item.borderHover}`}
+              class={`collection-card group relative p-5 md:p-8 rounded-2xl border border-white/10 bg-slate-950/40 backdrop-blur-xl transition-all duration-500 ease-out flex flex-col justify-between min-h-[240px] md:min-h-[280px] pointer-events-auto ${item.borderHover}`}
             >
               {/* Inner Soft Glow */}
               <div
@@ -150,11 +154,6 @@ export default defineComponent({
                     {item.subtitle}
                   </p>
                 </div>
-              </div>
-
-              {/* 3D Bottle Viewport Marker (Placeholder for WebGL anchoring) */}
-              <div class="bottle-viewport-anchor my-3 md:my-4 h-10 md:h-14 w-full flex items-center justify-center border border-dashed border-white/10 rounded-lg text-[9px] md:text-[10px] font-mono text-slate-500 uppercase tracking-widest group-hover:border-white/20 transition-colors">
-                [ 3D Model Focus Anchor ]
               </div>
 
               {/* Action Button revealed on hover */}

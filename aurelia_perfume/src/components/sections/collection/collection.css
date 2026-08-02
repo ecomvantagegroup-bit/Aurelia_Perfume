@@ -32,3 +32,24 @@
 .bottle-viewport-anchor {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
 }
+
+/*
+ * Collection cards grid — single source of truth for column count.
+ * Mobile: 1 column. Tablet (>=768px): 2 columns. Desktop (>=1024px): 3 columns.
+ */
+.collection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .collection-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
