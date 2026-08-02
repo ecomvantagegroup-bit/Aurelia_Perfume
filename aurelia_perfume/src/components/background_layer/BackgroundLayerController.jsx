@@ -9,7 +9,8 @@ export default defineComponent({
       default: 'hero',
     },
   },
-  setup() {
+  emits: ['assetsProgress', 'assetsReady'],
+  setup(props, { emit }) {
     const canvasRef = ref(null);
     const isMobile = window.innerWidth <= 768;
 
@@ -30,6 +31,44 @@ export default defineComponent({
     let currentFrame = 0;
     let targetFrame = 0;
     let animationFrameId = null;
+
+    // ---------------------------------------------------------------------
+    // Preload progress tracking. Every frame image is watched for its own
+    // load/error settlement so completion is real, not assumed — previously
+    // nothing tracked whether these ever finished, so a slow or failed
+    // frame just silently never drew (blank canvas at that scroll position)
+    // with no way for the rest of the app to know loading wasn't done.
+    // Mirrors the same assetsProgress/assetsReady contract Interactive3DLayer
+    // uses, so App.jsx can gate the preloader on both.
+    // ---------------------------------------------------------------------
+    let settledImageCount = 0;
+    let hasEmittedReady = false;
+
+    const emitBgProgress = () => {
+      const pct = totalFrames > 0 ? Math.round((settledImageCount / totalFrames) * 100) : 100;
+      emit('assetsProgress', Math.min(100, Math.max(0, pct)));
+    };
+
+    const handleImageSettled = () => {
+      settledImageCount++;
+      emitBgProgress();
+      if (settledImageCount >= totalFrames && !hasEmittedReady) {
+        hasEmittedReady = true;
+        emit('assetsReady');
+      }
+    };
+
+    // Attaches onload/onerror BEFORE assigning src, so an already-cached
+    // image resolving synchronously can't fire before the handler exists.
+    // onerror still counts toward completion — a single missing/broken
+    // frame file should never be able to hang the preloader forever.
+    const createTrackedImage = (src) => {
+      const img = new Image();
+      img.onload = handleImageSettled;
+      img.onerror = handleImageSettled;
+      img.src = src;
+      return img;
+    };
 
     const render = () => {
       const canvas = canvasRef.value;
@@ -71,6 +110,15 @@ export default defineComponent({
     };
 
     const preloadAllImages = () => {
+      if (totalFrames === 0) {
+        emit('assetsProgress', 100);
+        if (!hasEmittedReady) {
+          hasEmittedReady = true;
+          emit('assetsReady');
+        }
+        return;
+      }
+
       const forestFolder = isMobile
         ? '/forest_essence/mobile'
         : '/forest_essence/laptop_and_desktop';
@@ -95,51 +143,37 @@ export default defineComponent({
 
       // 1. Forest Essence frames
       for (let i = 0; i < forestFrames; i++) {
-        const img = new Image();
-        img.src = `${forestFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${forestFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
 
       // 2. Fragrance Notes frames
       for (let i = 0; i < notesFrames; i++) {
-        const img = new Image();
-        img.src = `${notesFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${notesFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
 
       // 3. Ocean Bloom frames
       for (let i = 0; i < oceanFrames; i++) {
-        const img = new Image();
-        img.src = `${oceanFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${oceanFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
 
       // 4. Aurelia Story frames
       for (let i = 0; i < storyFrames; i++) {
-        const img = new Image();
-        img.src = `${storyFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${storyFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
 
       // 5. Golden Amber frames
       for (let i = 0; i < amberFrames; i++) {
-        const img = new Image();
-        img.src = `${amberFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${amberFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
 
       // 6. Collection frames
       for (let i = 0; i < collectionFrames; i++) {
-        const img = new Image();
-        img.src = `${collectionFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${collectionFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
 
       // 7. CTA frames
       for (let i = 0; i < ctaFrames; i++) {
-        const img = new Image();
-        img.src = `${ctaFolder}/${String(i + 1).padStart(4, '0')}.webp`;
-        images.push(img);
+        images.push(createTrackedImage(`${ctaFolder}/${String(i + 1).padStart(4, '0')}.webp`));
       }
     };
 

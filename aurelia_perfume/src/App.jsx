@@ -1,4 +1,4 @@
-import { defineComponent, ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { defineComponent, ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -20,12 +20,20 @@ export default defineComponent({
     const activeSection = ref('hero');
     let scrollTriggers = [];
 
-    // Real 3D asset loading state, reported by Interactive3DLayer as it
-    // downloads models/textures and warms up shaders. The Preloader uses
-    // this instead of a simulated timer to decide when it's actually safe
-    // to reveal the experience.
+    // Real asset loading state from each layer that has something to
+    // preload. Interactive3DLayer reports models/textures/shaders;
+    // BackgroundLayerController reports its image-sequence frames. The
+    // Preloader is only told the experience is "ready" once every layer
+    // that reported in has finished — combining them here instead of
+    // wiring the Preloader to just one layer.
     const assetsProgress = ref(0);
     const assetsReady = ref(false);
+
+    const bgProgress = ref(0);
+    const bgReady = ref(false);
+
+    const combinedProgress = computed(() => Math.round((assetsProgress.value + bgProgress.value) / 2));
+    const combinedReady = computed(() => assetsReady.value && bgReady.value);
 
     const handlePreloaderLoaded = () => {
       isLoading.value = false;
@@ -40,6 +48,14 @@ export default defineComponent({
 
     const handleAssetsReady = () => {
       assetsReady.value = true;
+    };
+
+    const handleBgProgress = (percent) => {
+      bgProgress.value = percent;
+    };
+
+    const handleBgReady = () => {
+      bgReady.value = true;
     };
 
     const initScrollTriggers = () => {
@@ -99,8 +115,8 @@ export default defineComponent({
         {/* System Overlays */}
         {isLoading.value && (
           <Preloader
-            progress={assetsProgress.value}
-            ready={assetsReady.value}
+            progress={combinedProgress.value}
+            ready={combinedReady.value}
             onLoaded={handlePreloaderLoaded}
           />
         )}
@@ -108,7 +124,11 @@ export default defineComponent({
 
         {/* Layer 1: Background Controller */}
         <div class="fixed inset-0 z-0 pointer-events-none">
-          <BackgroundLayerController activeSection={activeSection.value} />
+          <BackgroundLayerController
+            activeSection={activeSection.value}
+            onAssetsProgress={handleBgProgress}
+            onAssetsReady={handleBgReady}
+          />
         </div>
 
         {/* Layer 2: 3D Canvas Container */}
