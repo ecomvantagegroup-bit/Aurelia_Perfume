@@ -5,11 +5,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Layer Controllers & System Overlays
 import Preloader from './components/preloader/preloader';
 import Navbar from './components/navbar/navbar';
-import BackgroundLayerController from './components/background_layer/BackgroundLayerController';
-import Interactive3DLayer from './components/interactive-3d-layer/Interactive3DLayer';
+import BackgroundLayerController from './components/background_layer/BackgroundLayerController.jsx';
+import Interactive3DLayer from './components/interactive-3d-layer/Interactive3DLayer.jsx';
 
 // Content Layer
-import ContentLayer from './components/content_layer/content_layer';
+import ContentLayer from './components/content_layer/content_layer.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
