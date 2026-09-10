@@ -8,6 +8,8 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/Aurelia_Perfume/', // <-- Added to match your exact repository name casing
+
   server: {
     allowedHosts: true,
   },
