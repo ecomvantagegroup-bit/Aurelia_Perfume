@@ -42,9 +42,6 @@ Premium Digital Fragrance Experience
 | Project               | Aurelia Perfume                |
 | Industry              | Luxury Product / Fragrance     |
 | Package               | Launch + Interactive 3D        |
-| Base Package          | $2,000                         |
-| Interactive 3D Add-on | +$800                          |
-| Total Demo Price      | **$2,800**                     |
 | Project Type          | Premium Single-Page Experience |
 | Framework             | Vue 3                          |
 | Language              | TypeScript                     |
@@ -1499,7 +1496,7 @@ These can be offered as additional services for a real client.
 
 # Project Positioning
 
-**Aurelia is the $2,800 Launch + Interactive 3D showcase.**
+**Aurelia is the Launch + Interactive 3D showcase.**
 
 It demonstrates how a focused single-page website can combine:
 
