@@ -1,0 +1,17 @@
+{
+  "dracoDecoderPath": "https://www.gstatic.com/draco/versioned/decoders/1.5.6/",
+  "models": [
+    {
+      "key": "forest",
+      "path": "models/forest_bottle.glb"
+    },
+    {
+      "key": "ocean",
+      "path": "models/ocean_bottle.glb"
+    },
+    {
+      "key": "amber",
+      "path": "models/amber_bottle.glb"
+    }
+  ]
+}

@@ -8,34 +8,37 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/Aurelia_Perfume/', // <-- Added to match your exact repository name casing
+    base: '/Aurelia_Perfume/', 
 
-  server: {
-    allowedHosts: true,
-  },
-  plugins: [
-    vue(),
-    vueJsx(),
-    tailwindcss(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules/three')) {
-            return 'three';
-          }
-          if (id.includes('node_modules/gsap')) {
-            return 'gsap';
-          }
+    server: {
+        allowedHosts: true,
+        watch: {
+            ignored: ['**/.vs/**'],
         },
-      },
     },
-  },
+    plugins: [
+        vue(),
+        vueJsx(),
+        tailwindcss(),
+        vueDevTools(),
+    ],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+        },
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules/three')) {
+                        return 'three';
+                    }
+                    if (id.includes('node_modules/gsap')) {
+                        return 'gsap';
+                    }
+                },
+            },
+        },
+    },
 })

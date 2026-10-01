@@ -1,0 +1,182 @@
+{
+  "hero": {
+    "logo": "A U R E L I A",
+    "subtitle": "THE ART OF SCENT",
+    "tagline": [ "Three worlds.", "Three compositions." ],
+    "taglineEmphasis": "One signature.",
+    "ctaLabel": "Explore the Collection",
+    "scrollLabel": "SCROLL TO DISCOVER"
+  },
+
+  "forest": {
+    "number": "01 — ESSENCE",
+    "title": "FOREST ESSENCE",
+    "notes": [ "Fresh", "Botanical", "Earthy" ],
+    "ctaLabel": "Discover Fragrance Notes"
+  },
+
+  "notes": {
+    "chapter": "04 — Specification",
+    "titleLead": "Forest",
+    "titleAccent": "Essence",
+    "subtitle": "Fresh / Botanical / Earthy",
+    "pyramid": [
+      {
+        "category": "TOP NOTE",
+        "detail": "Bergamot",
+        "widthPercent": 100
+      },
+      {
+        "category": "HEART NOTE",
+        "detail": "Cedar Leaf",
+        "widthPercent": 88
+      },
+      {
+        "category": "BASE NOTE",
+        "detail": "Moss",
+        "widthPercent": 75
+      }
+    ],
+    "footer": [ "Vol. 100ML", "Eau De Parfum", "75% VOL." ]
+  },
+
+  "ocean": {
+    "chapter": "05 — Fragrance Chapter",
+    "tags": [ "Aquatic", "Mineral", "Fresh" ],
+    "titleLead": "Ocean",
+    "titleAccent": "Bloom",
+    "description": "Descend into cooler aquatic depths. A crisp synthesis of coastal sunrise, mineral currents, and pristine underwater refraction capturing the raw vitality of the open sea.",
+    "notes": [
+      {
+        "category": "TOP NOTE",
+        "detail": "Crisp Sea Salt & Bergamot"
+      },
+      {
+        "category": "HEART NOTE",
+        "detail": "Ocean Water Lily & Sage"
+      },
+      {
+        "category": "BASE NOTE",
+        "detail": "Driftwood & Ambergris"
+      }
+    ]
+  },
+
+  "story": {
+    "chapter": "06 — Aurelia Story",
+    "breathingLabel": "A visual breathing point",
+    "headline": "A fragrance is more than a scent.",
+    "lines": [ "It is a place.", "A memory.", "A moment that stays." ],
+    "brandLabel": "Brand Story",
+    "brandTitle": "The Aurelia House",
+    "brandText": "Aurelia creates fragrances inspired by places, memories, and moments that remain long after the first impression."
+  },
+
+  "amber": {
+    "chapter": "07 — Fragrance Chapter",
+    "titleLead": "Golden",
+    "titleAccent": "Amber",
+    "characterLabel": "Fragrance Character",
+    "character": "Warm / Sensual / Rich",
+    "description": "Immersed in midday desert heat. Resinous warmth enveloped in golden sunbeams, subtle floating smoke, and warm reflections captured under intense solar rays.",
+    "tags": [ "Warm", "Sensual", "Rich" ],
+    "pyramid": [
+      {
+        "category": "TOP NOTE",
+        "detail": "Warm Spices & Amber Dust"
+      },
+      {
+        "category": "HEART NOTE",
+        "detail": "Smokey Resin & Solar Accord"
+      },
+      {
+        "category": "BASE NOTE",
+        "detail": "Golden Amber & Sandalwood"
+      }
+    ]
+  },
+
+  "collection": {
+    "chapter": "08 — The Complete Discovery",
+    "titleLead": "THE",
+    "titleAccent": "COLLECTION",
+    "tagline": "The three fragrance worlds finally come together.",
+    "volume": "100 ML",
+    "ctaLabel": "Explore World",
+    "items": [
+      {
+        "id": "02",
+        "modelKey": "ocean",
+        "title": "Ocean Bloom",
+        "subtitle": "Aquatic / Mineral / Fresh"
+      },
+      {
+        "id": "01",
+        "modelKey": "forest",
+        "title": "Forest Essence",
+        "subtitle": "Fresh / Botanical / Earthy"
+      },
+      {
+        "id": "03",
+        "modelKey": "amber",
+        "title": "Golden Amber",
+        "subtitle": "Warm / Sensual / Rich"
+      }
+    ],
+    "footer": [ "Aurelia Parfums", "Trilogy Edition", "Crafted in France" ]
+  },
+
+  "cta": {
+    "chapter": "09 — Final Chapter",
+    "headingLine1": "Find the scent",
+    "headingLine2": "that becomes yours.",
+    "buttonLabel": "Discover Aurelia",
+    "buttonArrow": "→"
+  },
+
+  "footer": {
+    "brand": "Aurelia",
+    "tagline": "Haute Parfumerie • Paris",
+    "navigation": {
+      "title": "Navigation",
+      "links": [
+        {
+          "label": "Collection",
+          "href": "#sec-collection"
+        },
+        {
+          "label": "Story",
+          "href": "#sec-story"
+        },
+        {
+          "label": "Contact",
+          "href": "#contact"
+        }
+      ]
+    },
+    "social": {
+      "title": "Social",
+      "links": [
+        {
+          "label": "Instagram",
+          "href": "https://instagram.com"
+        },
+        {
+          "label": "Pinterest",
+          "href": "https://pinterest.com"
+        }
+      ]
+    },
+    "copyright": "© 2026 VINTEGE.DIGITAL",
+    "legal": [
+      {
+        "label": "Privacy Policy",
+        "href": "#privacy"
+      },
+      {
+        "label": "Terms of Use",
+        "href": "#terms"
+      }
+    ]
+  }
+}

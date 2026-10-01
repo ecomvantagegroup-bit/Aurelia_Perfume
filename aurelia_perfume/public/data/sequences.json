@@ -1,0 +1,85 @@
+{
+  "mobileMaxWidth": 768,
+  "extension": "webp",
+  "padLength": 4,
+  "startIndex": 1,
+  "sequences": [
+    {
+      "key": "forest",
+      "frames": {
+        "mobile": 120,
+        "desktop": 250
+      },
+      "folders": {
+        "mobile": "forest_essence/mobile",
+        "desktop": "forest_essence/laptop_and_desktop"
+      }
+    },
+    {
+      "key": "notes",
+      "frames": {
+        "mobile": 192,
+        "desktop": 384
+      },
+      "folders": {
+        "mobile": "fragrance_notes/mobile",
+        "desktop": "fragrance_notes/laptop_and_desktop"
+      }
+    },
+    {
+      "key": "ocean",
+      "frames": {
+        "mobile": 120,
+        "desktop": 250
+      },
+      "folders": {
+        "mobile": "ocean_bloom/mobile",
+        "desktop": "ocean_bloom/laptop_and_desktop"
+      }
+    },
+    {
+      "key": "story",
+      "frames": {
+        "mobile": 96,
+        "desktop": 240
+      },
+      "folders": {
+        "mobile": "aurelia_story/mobile",
+        "desktop": "aurelia_story/laptop_and_desktop"
+      }
+    },
+    {
+      "key": "amber",
+      "frames": {
+        "mobile": 120,
+        "desktop": 250
+      },
+      "folders": {
+        "mobile": "golden_amber/mobile",
+        "desktop": "golden_amber/laptop_and_desktop"
+      }
+    },
+    {
+      "key": "collection",
+      "frames": {
+        "mobile": 96,
+        "desktop": 240
+      },
+      "folders": {
+        "mobile": "collection/mobile",
+        "desktop": "collection/laptop_and_desktop"
+      }
+    },
+    {
+      "key": "cta",
+      "frames": {
+        "mobile": 96,
+        "desktop": 240
+      },
+      "folders": {
+        "mobile": "cta/mobile",
+        "desktop": "cta/laptop_and_desktop"
+      }
+    }
+  ]
+}
