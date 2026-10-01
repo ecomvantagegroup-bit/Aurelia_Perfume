@@ -10,14 +10,14 @@
 
 The experience combines:
 
-* Cinematic image sequences
+* Cinematic, scroll-driven image sequences (canvas)
 * Interactive Three.js perfume bottles
-* GSAP scroll-driven storytelling
-* Lenis smooth scrolling
+* GSAP ScrollTrigger storytelling
 * Atmospheric particle effects
 * Premium editorial typography
 * Dark luxury visual design
-* Art-directed scene transitions
+* Looping background ambience
+* A fully data-driven setup (text, sequences, models and audio live in JSON)
 
 Rather than rendering an entire environment in real time, Aurelia uses a **hybrid 2D + 3D architecture**.
 
@@ -35,89 +35,32 @@ Premium Digital Fragrance Experience
 
 ---
 
-# Project Information
+## Project Information
 
-| Item                  | Details                        |
-| --------------------- | ------------------------------ |
-| Project               | Aurelia Perfume                |
-| Industry              | Luxury Product / Fragrance     |
-| Package               | Launch + Interactive 3D        |
-| Project Type          | Premium Single-Page Experience |
-| Framework             | Vue 3                          |
-| Language              | JavaScript                     |
-| Build Tool            | Vite                           |
-| Rendering             | Hybrid 2D + 3D                 |
-| Responsive            | Desktop / Tablet / Mobile      |
-
----
-
-# Project Goal
-
-The goal is to create a digital fragrance experience that feels closer to a **luxury perfume campaign** than a conventional website.
-
-Aurelia should demonstrate the ability to combine:
-
-* Premium UI/UX
-* Creative frontend development
-* Interactive 3D
-* Cinematic motion
-* Scroll storytelling
-* Performance optimisation
-* Responsive interaction
-
-The visitor should not think:
-
-> "This website uses Three.js."
-
-Instead, they should feel:
-
-> **"This feels like a perfume campaign I can interact with."**
+| Item        | Details                                          |
+| ----------- | ------------------------------------------------ |
+| Project     | Aurelia Perfume                                  |
+| Industry    | Luxury Product / Fragrance                       |
+| Package     | Launch + Interactive 3D                          |
+| Type        | Premium single-page experience                   |
+| Framework   | Vue 3 (JSX components)                           |
+| Language    | JavaScript                                       |
+| Build tool  | Vite 7                                           |
+| Styling     | Tailwind CSS 4                                   |
+| Animation   | GSAP + ScrollTrigger                             |
+| 3D          | three.js (GLTF + Draco)                          |
+| Rendering   | Hybrid 2D + 3D                                   |
+| Hosting     | GitHub Pages (GitHub Actions)                    |
 
 ---
 
-# Design Philosophy
+## Design Philosophy
 
-Aurelia follows a **dark luxury + cinematic editorial** design language.
+Aurelia follows a **dark luxury + cinematic editorial** design language: elegant, minimal, sophisticated, atmospheric and restrained. It should feel like a perfume campaign you can interact with, not a technology demo, an ecommerce template or an over-animated WebGL experiment.
 
-The visual identity should feel:
+> **Make the experience feel expensive, not technically complicated.**
 
-* Elegant
-* Minimal
-* Sophisticated
-* Cinematic
-* Atmospheric
-* Premium
-* Modern
-* Restrained
-
-The experience should avoid feeling like:
-
-* A generic ecommerce template
-* A technology showcase
-* An over-animated WebGL experiment
-* A conventional product catalogue
-
-### Core Philosophy
-
-```text
-Luxury
-   +
-Editorial Design
-   +
-Cinematic Motion
-   +
-Interactive 3D
-   +
-Performance
-   =
-Aurelia
-```
-
----
-
-# Visual Hierarchy
-
-The experience follows a strict visual hierarchy:
+### Visual hierarchy
 
 ```text
 Image Sequence       50%
@@ -126,1433 +69,405 @@ Typography           15%
 Effects               5%
 ```
 
-The image sequence creates the world.
+The image sequence creates the world, the 3D bottle creates interaction, typography tells the story, and effects add atmosphere. Nothing should compete unnecessarily with the perfume.
 
-The 3D bottle creates interaction.
-
-Typography tells the story.
-
-Effects provide atmosphere.
-
-Nothing should compete unnecessarily with the perfume.
-
----
-
-# Design Style
-
-## Theme
-
-**Dark Luxury**
-
-The interface is primarily dark so the fragrance bottles, lighting, and cinematic sequences become the focus.
-
-Visual language:
-
-* Deep black backgrounds
-* Soft white typography
-* Muted gold accents
-* Scene-specific colour accents
-* Large editorial typography
-* Fine separator lines
-* Generous whitespace
-* Subtle grain
-* Minimal UI
-
----
-
-# Colour System
+### Colour system
 
 ```text
-Background
-#0B0B0B
-
-Surface
-#151515
-
-Primary Text
-#F8F8F8
-
-Muted Text
-#999999
-
-Luxury Gold
-#C8A96A
-
-Forest
-#304B3B
-
-Ocean
-#254B61
-
-Amber
-#9A5B24
+Background      #0B0B0B
+Surface         #151515
+Primary text    #F8F8F8
+Muted text      #999999
+Luxury gold     #C8A96A
+Forest          #304B3B
+Ocean           #254B61
+Amber           #9A5B24
 ```
 
-The forest, ocean, and amber colours should primarily appear within their respective scenes rather than changing the entire website theme.
-
----
-
-# Typography
-
-## Display
-
-**Cormorant Garamond**
-
-Used for:
-
-* Hero headlines
-* Fragrance names
-* Editorial statements
-* Brand storytelling
-
-## UI
-
-**Inter**
-
-Used for:
-
-* Navigation
-* Buttons
-* Labels
-* Descriptions
-* Fragrance notes
-* Footer
-
-### Typography Direction
-
-```text
-AURELIA
-
-Large
-Elegant
-Editorial
-High contrast
-Generous spacing
-```
-
-Supporting text should remain restrained and minimal.
-
----
-
-# Motion Philosophy
-
-Animation should feel:
-
-* Slow
-* Intentional
-* Smooth
-* Organic
-* Cinematic
-* Expensive
-
-Avoid excessive motion.
-
-The website should feel like a continuous visual journey rather than a collection of animation demos.
-
----
-
-# Transition System
-
-Aurelia uses different transitions depending on the type of content being connected.
-
-The transition itself should communicate the relationship between two sections.
-
-There are four primary transition styles.
-
----
-
-## 01 — Orbital Transition
-
-### Used for
-
-```text
-Forest Essence
-        ↓
-Ocean Bloom
-```
-
-This is the primary transition between major fragrance worlds.
-
-The bottle and camera move through a subtle circular/orbital arc while the environment changes.
-
-```text
-Forest
-   ↓
-Bottle rotates slightly
-   ↓
-Camera arcs around product
-   ↓
-Forest fades
-   ↓
-Ocean emerges
-   ↓
-Blue bottle appears
-```
-
-### Motion
-
-* 15–40° bottle/camera movement
-* Environment crossfade
-* Subtle parallax
-* Smooth colour transformation
-* No full 360° spinning
-
-The goal is **organic movement**, not a spinning webpage.
-
----
-
-# 02 — Linear Reveal
-
-### Used for
-
-* Fragrance Notes
-* Collection
-* Final CTA
-* Editorial content
-
-The content enters vertically as the visitor scrolls.
-
-Example:
-
-```text
-FOREST ESSENCE
-
-Fresh
-Botanical
-Earthy
-
-        ↓
-
-TOP
-Bergamot
-
-        ↓
-
-HEART
-Cedar Leaf
-
-        ↓
-
-BASE
-Moss
-```
-
-This gives the visitor a visual breathing point after a cinematic sequence.
-
----
-
-# 03 — Dissolve Transition
-
-### Used for
-
-```text
-Ocean Bloom
-      ↓
-Aurelia Story
-```
-
-After an intense visual scene, the environment gradually disappears.
-
-```text
-Ocean
-   ↓
-Blue desaturates
-   ↓
-Image fades
-   ↓
-Bottle disappears
-   ↓
-Black space
-   ↓
-Typography appears
-```
-
-This creates an emotional pause.
-
-It prevents the experience from becoming visually exhausting.
-
----
-
-# 04 — Pull-Back Transition
-
-### Used for
-
-```text
-Golden Amber
-      ↓
-The Collection
-```
-
-The camera slowly pulls away from the final fragrance.
-
-```text
-Amber Bottle
-      ↓
-Camera moves backward
-      ↓
-Environment recedes
-      ↓
-Black space expands
-      ↓
-Other bottles appear
-      ↓
-Collection is revealed
-```
-
-The three individual fragrance worlds finally become one collection.
-
----
-
-# Complete Transition Map
-
-```text
-                         HERO
-                           │
-                    Linear Reveal
-                           ↓
-                   FOREST ESSENCE
-                           │
-                   Orbital Transition
-                           ↓
-                    OCEAN BLOOM
-                           │
-                    Linear Reveal
-                           ↓
-                  FRAGRANCE NOTES
-                           │
-                   Dissolve Transition
-                           ↓
-                    AURELIA STORY
-                           │
-              Colour Transformation
-                           ↓
-                   GOLDEN AMBER
-                           │
-                  Camera Pull-Back
-                           ↓
-                   THE COLLECTION
-                           │
-                    Linear Reveal
-                           ↓
-                      FINAL CTA
-                           │
-                         FOOTER
-```
-
----
-
-# Website Structure
-
-## 01 — Preloader
-
-Minimal loading experience.
-
-```text
-A U R E L I A
-
-LOADING EXPERIENCE
-
-████████████░░░░
-```
-
-### Purpose
-
-Provides time to load the initial experience:
-
-* Application shell
-* Hero assets
-* Initial 3D model
-* Required textures
-
-### Animation
-
-* Logo reveal
-* Progress animation
-* Fade into hero
-
-Keep the preloader simple.
-
----
-
-# 02 — Hero
-
-The hero introduces Aurelia before entering the fragrance worlds.
-
-### Content
-
-```text
-AURELIA
-
-THE ART OF SCENT
-
-Three worlds.
-Three compositions.
-One signature.
-
-[ Explore the Collection ]
-```
-
-### Visual
-
-* Deep black background
-* Signature 3D bottle
-* Subtle HDRI reflection
-* Slow bottle rotation
-* Fine film grain
-* Minimal glow
-
-### Animation
-
-* Logo fade-in
-* Bottle reveal
-* Slow rotation
-* Typography reveal
-* Scroll indicator
-
-### Scroll Indicator
-
-```text
-SCROLL TO DISCOVER
-        ↓
-```
-
----
-
-# 03 — Forest Essence
-
-### Fragrance Character
-
-**Fresh / Botanical / Earthy**
-
-The first fragrance introduces Aurelia through nature.
-
-### Environment
-
-Cinematic forest image sequence featuring:
-
-* Mist
-* Trees
-* Filtered sunlight
-* Natural atmosphere
-* Slow cinematic camera movement
-
-### 3D Product
-
-**Frosted Green Bottle**
-
-### Effects
-
-* Floating leaves
-* Gentle bottle rotation
-* Slight floating motion
-* Mouse parallax
-
-Environmental lighting should primarily come from the pre-rendered sequence.
+Forest, ocean and amber colours appear primarily inside their own scenes rather than changing the whole site theme.
 
 ### Typography
 
+* **Display** (hero, fragrance names, editorial statements): serif — Cormorant Garamond
+* **UI** (navigation, buttons, labels, notes, footer): sans / mono — Inter
+
+Large, elegant, high-contrast headlines with generous letter-spacing; supporting text stays minimal.
+
+### Motion
+
+Slow, intentional, smooth, organic, cinematic. The site should feel like one continuous visual journey, not a collection of animation demos.
+
+---
+
+## Experience Flow
+
 ```text
-01
-
-FOREST ESSENCE
-
-Fresh
-Botanical
-Earthy
+PRELOADER → HERO → FOREST ESSENCE → FRAGRANCE NOTES → OCEAN BLOOM
+          → AURELIA STORY → GOLDEN AMBER → THE COLLECTION → FINAL CTA → FOOTER
 ```
 
+| #  | Section          | Element id        | Pinned scroll length | 3D bottle        | Particles          |
+| -- | ---------------- | ----------------- | -------------------- | ---------------- | ------------------ |
+| —  | Hero             | `sec-hero`        | not pinned           | procedural hero  | —                  |
+| 01 | Forest Essence   | `sec-forest`      | +200%                | forest           | fireflies          |
+| 04 | Fragrance Notes  | `sec-notes`       | +180%                | forest (shared)  | fireflies          |
+| 05 | Ocean Bloom      | `sec-ocean`       | +150%                | ocean            | mist               |
+| 06 | Aurelia Story    | `sec-story`       | +150%                | amber (shared)   | —                  |
+| 07 | Golden Amber     | `sec-amber`       | +150%                | amber            | sand / golden dust |
+| 08 | The Collection   | `sec-collection`  | +180%                | all three        | —                  |
+| 09 | Final CTA        | `sec-cta`         | +150%                | none             | —                  |
+| —  | Footer           | `sec-footer`      | not pinned           | none             | —                  |
+
+Sections that share a bottle (Forest + Notes, Story + Amber) keep the same model on screen instead of replaying its entrance.
+
+### Section notes
+
+* **Hero** — logo, tagline and call to action over a slow-rotating signature bottle.
+* **Forest Essence** — fresh / botanical / earthy; frosted green bottle.
+* **Fragrance Notes** — editorial top / heart / base pyramid for Forest Essence.
+* **Ocean Bloom** — aquatic / mineral / fresh; blue crystal bottle; note cards are built into this section.
+* **Aurelia Story** — a typographic breathing point between Ocean and Amber.
+* **Golden Amber** — warm / sensual / rich; the visual climax.
+* **The Collection** — the three bottles side by side with hover highlight; the bottles are positioned and sized to fit each card.
+* **Final CTA** — large typography reveal with a magnetic button.
+* **Footer** — minimal luxury footer with navigation, social and legal links.
+
 ---
 
-# 04 — Fragrance Notes
+## How It Works
 
-A minimal editorial section following Forest Essence.
-
-### Content
+### Three stacked layers
 
 ```text
-FOREST ESSENCE
-
-Fresh / Botanical / Earthy
-
-TOP
-Bergamot
-
-HEART
-Cedar Leaf
-
-BASE
-Moss
+z-30  Content layer            HTML sections (text, cards, buttons)
+z-20  Interactive 3D layer     one persistent three.js canvas
+z-0   Background layer         canvas drawing the image sequence frames
+      + Preloader / Navbar / Sound button overlays
 ```
 
-### Design
+### Scroll → frames
 
-* Black background
-* Large whitespace
-* Thin separator lines
-* Small uppercase labels
-* Elegant typography
-* Vertical scroll reveal
+1. `content_layer.jsx` creates one **master ScrollTrigger** spanning every sequence section (Forest → CTA).
+2. As it scrubs, it dispatches a `global-sequence-progress` event with a 0–1 progress value.
+3. `BackgroundLayerController.jsx` maps that progress onto the combined frame list and eases toward the target frame (lerp) before drawing it to the canvas.
+4. All frames of all sequences form one continuous timeline, in the order listed in `sequences.json`.
 
-This should feel like a **luxury fragrance specification**, not a standard ingredient card layout.
+### Scroll → active section → 3D bottle
 
----
+1. `App.jsx` creates a ScrollTrigger per section and tracks the **active section**.
+2. `Interactive3DLayer.jsx` watches the active section and runs a GSAP timeline: outgoing bottle slides out, incoming bottle scales in, and lighting, fog, exposure and particles crossfade.
+3. Each bottle has a **minimum dwell time** (about 2.2 s) so fast scrolling cannot cut a fragrance's moment short; only the latest requested section is honoured.
+4. In the Collection, bottles are positioned and scaled every frame from their card elements, because that section is pinned and scrubbed.
 
-# 05 — Ocean Bloom
+### Mouse interaction
 
-### Fragrance Character
+Mouse movement subtly tilts the active bottle. Hovering a bottle in the Collection scales it up and lights it with a spotlight.
 
-**Aquatic / Mineral / Fresh**
+### 3D rendering
 
-The second fragrance moves into a cooler blue environment.
-
-### Environment
-
-Cinematic ocean sequence featuring:
-
-* Ocean surface
-* Underwater light
-* Coastal sunrise
-* Waves
-* Reflections
-
-### 3D Product
-
-**Blue Crystal Bottle**
-
-### Effects
-
-* Tiny bubbles
-* Slow bottle rotation
-* Reflective HDRI lighting
-* Subtle mouse parallax
-
-Avoid:
-
-* Real-time water simulation
-* Fluid physics
-* Complex water caustics
-
-The cinematic sequence provides the environmental realism.
+* One persistent `WebGLRenderer` (transparent canvas, ACES tone mapping, pixel ratio capped at 1.5).
+* GLB models are normalised to a common height, and glass parts are upgraded to physically-based transmissive glass while keeping label textures and UVs.
+* Lighting: ambient + key + fill + rim lights, a procedurally generated studio environment map for reflections, and per-section colour, fog and exposure.
+* If a model fails to load, a procedural fallback bottle is used so the site never breaks.
 
 ---
 
-# 06 — Aurelia Story
+## Data-Driven Configuration
 
-A visual breathing point between Ocean Bloom and Golden Amber.
+Nothing about sequences, models or copy is hard-coded in the components. Everything is read from JSON in `public/data/` before it is used.
 
-### Main Statement
+| File                       | Controls                                                              |
+| -------------------------- | --------------------------------------------------------------------- |
+| `public/data/content.json`   | All section text, labels, note pyramids and footer links            |
+| `public/data/sequences.json` | Image sequence folders, frame counts (mobile / desktop), file naming |
+| `public/data/models.json`    | GLB model paths and the Draco decoder path                          |
+| `public/data/audio.json`     | Background sound file, volume, loop and fade times                  |
+
+### Base-aware paths
+
+Every asset path is resolved through `assetUrl()` in `src/utils/dataLoader.js`, which prefixes Vite's `BASE_URL`. This is what makes the site work both locally (`/`) and on GitHub Pages (`/Aurelia_Perfume/`).
+
+**Rule: write paths without a leading `./` or `/`.**
 
 ```text
-A fragrance is more than a scent.
-
-It is a place.
-A memory.
-A moment that stays.
+forest_essence/mobile      ✅
+models/forest_bottle.glb   ✅
+/forest_essence/mobile     ❌
+./models/forest_bottle.glb ❌
 ```
 
-### Brand Story
+### `sequences.json`
 
-```text
-THE AURELIA HOUSE
-
-Aurelia creates fragrances inspired by
-places, memories and moments that remain
-long after the first impression.
+```json
+{
+  "mobileMaxWidth": 768,
+  "extension": "webp",
+  "padLength": 4,
+  "startIndex": 1,
+  "sequences": [
+    {
+      "key": "forest",
+      "frames":  { "mobile": 120, "desktop": 250 },
+      "folders": { "mobile": "forest_essence/mobile", "desktop": "forest_essence/laptop_and_desktop" }
+    }
+  ]
+}
 ```
 
-### Transition
+The order of the `sequences` array is the order of the scroll timeline. Frame totals are calculated from this file (currently 1,854 frames on desktop and 840 on mobile).
 
-The Ocean scene dissolves into black.
+### `models.json`
 
-Typography gradually appears.
-
-No 3D environment is required.
-
----
-
-# 07 — Golden Amber
-
-### Fragrance Character
-
-**Warm / Sensual / Rich**
-
-The final fragrance acts as the visual climax.
-
-### Environment
-
-Cinematic golden sequence featuring:
-
-* Sand dunes
-* Sunset
-* Warm light
-* Amber atmosphere
-
-### 3D Product
-
-**Amber Glass Bottle**
-
-### Effects
-
-* Golden dust
-* Subtle smoke
-* Slow bottle rotation
-* Gentle camera dolly-in
-* Warm HDRI reflections
-
-This scene can have slightly stronger atmosphere because it represents the climax of the fragrance journey.
-
----
-
-# 08 — The Collection
-
-The three fragrance worlds finally come together.
-
-```text
-THE COLLECTION
-
-01
-FOREST ESSENCE
-Fresh / Botanical / Earthy
-
-02
-OCEAN BLOOM
-Aquatic / Mineral / Fresh
-
-03
-GOLDEN AMBER
-Warm / Sensual / Rich
+```json
+{
+  "dracoDecoderPath": "https://www.gstatic.com/draco/versioned/decoders/1.5.6/",
+  "models": [
+    { "key": "forest", "path": "models/forest_bottle.glb" },
+    { "key": "ocean",  "path": "models/ocean_bottle.glb" },
+    { "key": "amber",  "path": "models/amber_bottle.glb" }
+  ]
+}
 ```
 
-### Visual
+To host the Draco decoder yourself, copy `node_modules/three/examples/jsm/libs/draco/` to `public/draco/` and set `"dracoDecoderPath": "draco/"`.
 
-Three bottles displayed together:
+### `audio.json`
 
-```text
-        [GREEN]
-
-[BLUE]          [AMBER]
+```json
+{
+  "src": "audio/bg_ambient.mp3",
+  "loop": true,
+  "volume": 0.35,
+  "fadeInSeconds": 3,
+  "fadeOutSeconds": 0.8
+}
 ```
 
-### Interaction
+### `content.json`
 
-On hover:
+One block per section (`hero`, `forest`, `notes`, `ocean`, `story`, `amber`, `collection`, `cta`, `footer`). Each block is passed to its section component as a `content` prop.
 
-* Bottle slightly scales
-* Soft highlight appears
-* Text shifts subtly
-* CTA becomes visible
-
-### Transition Into Collection
-
-Use the **Golden Amber camera pull-back**.
-
-The visitor should feel as though they are leaving the final fragrance world and discovering the complete Aurelia collection.
+> **Tailwind classes cannot live in JSON.** Tailwind only generates classes it finds in source files, so colour themes and layout classes (for example the Collection card colours or the Ocean card layout) stay in the `.jsx` files. JSON holds text and plain values only (for example `widthPercent` instead of a width class).
 
 ---
 
-# 09 — Final CTA
+## Loading Strategy
 
-The final section should be simple and memorable.
+The preloader stays on screen until **every** required resource is ready. It exits only when all of these are true:
+
+* `content.json` is loaded and the sections are mounted
+* every image sequence frame has loaded (or failed)
+* every GLB model and embedded texture has loaded, and shaders are compiled
+* web fonts are ready
+* the browser `load` event has fired
+* a minimum display time has passed (so a cached load doesn't flash)
+
+The progress bar is driven by the real number of sources loaded, and the preloader shows the counts:
 
 ```text
-FIND THE SCENT
-THAT BECOMES YOURS.
+312 / 744 sources loaded
 
-[ DISCOVER AURELIA ]
+CONTENT         1 / 1
+IMAGE FRAMES    300 / 650
+3D MODELS       2 / 5
 ```
 
-### Animation
+The bar holds at 99% until every gate is open and never moves backwards. Page scrolling is locked while the preloader is visible.
 
-* Large typography reveal
-* Subtle letter-spacing animation
-* Magnetic button
-* Slow fade into footer
+**Failure behaviour:** a missing frame or model counts as "settled" and a fallback is used, and a 15-second watchdog in the 3D layer reveals the site anyway. A broken file therefore never traps a visitor on the loader.
 
 ---
 
-# 10 — Footer
+## Background Audio
 
-Minimal luxury footer.
+`BackgroundAudio.jsx` plays a looping ambient track.
+
+* Starts after the preloader exits and fades in.
+* Browsers block sound until the visitor interacts, so if autoplay is refused the button reads **Tap to enable sound** and playback starts on the first click, tap or key press.
+* A small sound on/off button sits at the bottom right; the choice is remembered between visits.
+* Pauses while the tab is hidden and resumes when it is visible again.
+* iPhones ignore the volume setting, so the fade doesn't apply there.
+
+Put the file at `public/audio/bg_ambient.mp3` (or change `src` in `audio.json`).
+
+### Prompt for generating the sound
+
+> Luxury perfume brand ambient soundtrack, slow cinematic atmosphere, warm evolving synth pads and soft airy textures, subtle low drone, gentle shimmering high bells, faint organic layers drifting in and out (distant forest air, soft ocean swell, warm desert wind), very slow tempo, minimal and elegant, spacious reverb, sensual and mysterious, premium editorial mood. No vocals, no drums, no percussion, no melody hooks, no sudden changes. Seamless loop, same energy from start to end, soft fade-in and fade-out. Instrumental, 90 seconds.
+
+Exclude: vocals, lyrics, drums, beat, bass drops, distortion, harsh or sudden sounds, dramatic builds, cheerful pop, EDM.
+
+Tips: keep the track 60–120 s, make the end blend into the start, export MP3 at 128–160 kbps.
+
+---
+
+## Project Structure
 
 ```text
-AURELIA
-
-Collection
-Story
-Contact
-
-Instagram
-Pinterest
-
-© 2026 Aurelia
-```
-
-No unnecessary footer complexity.
-
----
-
-# Interactive 3D Features
-
-## Product Interaction
-
-Users can:
-
-* Rotate the perfume bottle
-* Move around the product with mouse movement
-* Interact through touch
-* View realistic reflections
-* Experience subtle floating motion
-
-The 3D experience should remain restrained.
-
----
-
-# Mouse Parallax
-
-Mouse movement subtly affects:
-
-* Bottle position
-* Bottle rotation
-* Typography depth
-* Background movement
-
-The effect should be noticeable only through the feeling of depth.
-
----
-
-# Scroll-Driven Animation
-
-GSAP ScrollTrigger controls:
-
-* Image sequence playback
-* Bottle rotation
-* Bottle movement
-* Typography reveals
-* Scene transitions
-* Particle activation
-* Collection reveal
-
-```text
-Scroll
-  ↓
-Image Sequence
-  ↓
-Bottle Motion
-  ↓
-Typography
-  ↓
-Particles
-  ↓
-Transition
-  ↓
-Next Scene
-```
-
----
-
-# Smooth Scrolling
-
-Use:
-
-**Lenis**
-
-Integrated with:
-
-**GSAP ScrollTrigger**
-
-Do not use Locomotive Scroll.
-
----
-
-# Particle System
-
-Use one reusable Three.js particle component.
-
-```text
-ParticleSystem.vue
-```
-
-Scene configuration:
-
-```text
-Forest
-→ Leaves
-
-Ocean
-→ Bubbles
-
-Amber
-→ Golden Dust
-```
-
-The same particle system should be configured differently per scene rather than creating three independent implementations.
-
----
-
-# Three.js Architecture
-
-Use **one persistent Three.js canvas**.
-
-```text
-                  THREE.JS CANVAS
-                         │
-                  BottleScene.vue
-                         │
-          ┌──────────────┼──────────────┐
-          │              │              │
-      Forest.glb      Ocean.glb      Amber.glb
-          │              │              │
-          └──────────────┼──────────────┘
-                         │
-                    HDRI Lighting
-                         │
-                   Particle System
-```
-
-Only the active product scene should be rendered visibly.
-
----
-
-# Image Sequence Architecture
-
-Use a reusable:
-
-```text
-ImageSequence.vue
-```
-
-Responsibilities:
-
-* Canvas rendering
-* Frame loading
-* Frame caching
-* Scroll progress
-* Responsive resizing
-* Lazy loading
-* Progressive loading
-* Mobile asset handling
-
-The component should remain independent from the actual fragrance content.
-
----
-
-# Loading Strategy
-
-```text
-Application Shell
-        ↓
-Preloader
-        ↓
-Hero Assets
-        ↓
-Hero 3D Bottle
-        ↓
-Hero Experience
-        ↓
-Forest Assets
-        ↓
-Ocean Assets
-        ↓
-Amber Assets
-```
-
-Only assets required immediately should block the initial experience.
-
-Remaining assets should load progressively.
-
----
-
-# 3D Optimisation
-
-Perfume models should be optimised for real-time WebGL rendering.
-
-Use:
-
-* Draco compression
-* Meshopt
-* KTX2/Basis textures
-* Baked details
-* Optimised materials
-* HDRI lighting
-
-Avoid excessive geometry and unnecessary real-time effects.
-
----
-
-# Lighting Strategy
-
-Use a lightweight lighting system:
-
-```text
-HDRI Environment
-       +
-Directional Light
-       +
-Subtle Rim Light
-```
-
-The image sequences already provide most of the environmental lighting.
-
-Avoid multiple dynamic shadow-casting lights.
-
----
-
-# Performance Strategy
-
-The experience should prioritise:
-
-* Fast initial rendering
-* Low GPU usage
-* Low memory usage
-* Responsive interaction
-* Lazy-loaded scenes
-* Optimised 3D models
-* Progressive asset loading
-* Mobile optimisation
-* Reduced particle count on mobile
-
-The first meaningful experience should not depend on loading every scene.
-
----
-
-# Responsive Design
-
-## Desktop
-
-Full cinematic experience:
-
-* Image sequence backgrounds
-* Interactive 3D bottles
-* Mouse parallax
-* Full particle effects
-* Advanced transitions
-
-## Tablet
-
-Maintain:
-
-* Image sequences
-* 3D interaction
-* Scroll animation
-
-Reduce unnecessary particle density.
-
-## Mobile
-
-Use:
-
-* Touch-based bottle interaction
-* Reduced particle density
-* Simplified parallax
-* Optimised image assets
-* Reduced-motion fallback where appropriate
-
-The mobile experience should feel intentionally designed rather than being a scaled-down desktop layout.
-
----
-
-# Accessibility
-
-The cinematic experience should still maintain:
-
-* Semantic HTML
-* Keyboard navigation
-* Visible focus states
-* Accessible buttons
-* Descriptive image alt text
-* Sufficient contrast
-* Reduced-motion support
-
-### Reduced Motion
-
-When reduced motion is enabled:
-
-Disable or reduce:
-
-* Smooth scrolling
-* Large parallax
-* Automatic bottle rotation
-* Heavy scroll animation
-
-Keep:
-
-* Content
-* Product information
-* Navigation
-* Essential imagery
-* Core interactions
-
----
-
-# Navigation
-
-Minimal sticky navigation:
-
-```text
-AURELIA
-
-Collection
-Story
-Notes
-
-                 Explore
-```
-
-Navigation becomes slightly smaller during scroll.
-
-Mobile uses a minimal menu overlay.
-
----
-
-# UI Interactions
-
-## Buttons
-
-Subtle premium interactions:
-
-* Magnetic movement
-* Underline animation
-* Letter-spacing change
-* Opacity transitions
-
-## Cursor
-
-Optional custom cursor:
-
-```text
-○
-```
-
-On interactive elements:
-
-```text
-EXPLORE
-```
-
-Disable the custom cursor on touch devices.
-
----
-
-# SEO
-
-The website should include:
-
-* Semantic HTML
-* Correct heading hierarchy
-* Meta title
-* Meta description
-* Open Graph metadata
-* Social sharing metadata
-* Canonical URL
-* Descriptive alt text
-* Favicon
-* Sitemap-ready architecture
-
-### Suggested Title
-
-```text
-Aurelia — The Art of Scent
-```
-
-### Suggested Description
-
-```text
-Discover Aurelia, a cinematic fragrance experience
-inspired by nature, memory and timeless elegance.
-```
-
----
-
-# Folder Structure
-
-```text
-aurelia-perfume/
+aurelia_perfume/
+│
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
 │
 ├── public/
+│   ├── data/
+│   │   ├── content.json
+│   │   ├── sequences.json
+│   │   ├── models.json
+│   │   └── audio.json
 │   ├── models/
-│   │   ├── forest.glb
-│   │   ├── ocean.glb
-│   │   └── amber.glb
-│   │
-│   ├── sequences/
-│   │   ├── forest/
-│   │   ├── ocean/
-│   │   └── amber/
-│   │
-│   └── hdri/
+│   │   ├── forest_bottle.glb
+│   │   ├── ocean_bottle.glb
+│   │   └── amber_bottle.glb
+│   ├── audio/
+│   │   └── bg_ambient.mp3
+│   ├── forest_essence/        { mobile/, laptop_and_desktop/ }  0001.webp …
+│   ├── fragrance_notes/       { mobile/, laptop_and_desktop/ }
+│   ├── ocean_bloom/           { mobile/, laptop_and_desktop/ }
+│   ├── aurelia_story/         { mobile/, laptop_and_desktop/ }
+│   ├── golden_amber/          { mobile/, laptop_and_desktop/ }
+│   ├── collection/            { mobile/, laptop_and_desktop/ }
+│   └── cta/                   { mobile/, laptop_and_desktop/ }
 │
 ├── src/
-│   │
-│   ├── assets/
-│   │   ├── textures/
-│   │   └── images/
-│   │
-│   ├── components/
-│   │   ├── Preloader.vue
-│   │   ├── Navigation.vue
-│   │   ├── Hero.vue
-│   │   ├── ImageSequence.vue
-│   │   ├── BottleScene.vue
-│   │   ├── ParticleSystem.vue
-│   │   ├── FragranceNotes.vue
-│   │   ├── StorySection.vue
-│   │   ├── Collection.vue
-│   │   ├── FinalCTA.vue
-│   │   └── Footer.vue
-│   │
-│   ├── composables/
-│   │   ├── useImageSequence.ts
-│   │   ├── useThreeScene.ts
-│   │   └── useScrollAnimation.ts
-│   │
-│   ├── styles/
-│   │   ├── globals.css
-│   │   └── typography.css
-│   │
-│   ├── views/
-│   │   └── Home.vue
-│   │
-│   ├── App.vue
-│   └── main.ts
+│   ├── App.jsx
+│   ├── utils/
+│   │   └── dataLoader.js              base-aware URLs + cached JSON loading
+│   └── components/
+│       ├── preloader/                 preloader.jsx
+│       ├── navbar/                    navbar.jsx
+│       ├── background_layer/          BackgroundLayerController.jsx
+│       ├── interactive-3d-layer/      Interactive3DLayer.jsx
+│       ├── background_audio/          BackgroundAudio.jsx
+│       ├── content_layer/             content_layer.jsx
+│       └── sections/
+│           ├── hero/                  hero.jsx
+│           ├── forest_essence/        forest_essence.jsx
+│           ├── fragrance_notes/       fragrance_notes.jsx
+│           ├── ocean_bloom/           ocean_bloom.jsx
+│           ├── aurelia_story/         aurelia_story.jsx
+│           ├── golden_amber/          amber.jsx
+│           ├── collection/            collection.jsx
+│           ├── cta/                   cta.jsx
+│           └── footer/                footer.jsx
 │
-├── .gitignore
 ├── index.html
 ├── package.json
+├── package-lock.json
+├── vite.config.js
 ├── tsconfig.json
-├── vite.config.ts
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── .gitignore
 └── README.md
 ```
 
+Each component keeps its own stylesheet next to it (`hero.css`, `collection.css`, and so on).
+
 ---
 
-# Scene Configuration
+## Getting Started
 
-Scenes should be configuration-driven rather than hardcoded.
+**Requirements:** Node.js `^20.19.0` or `>=22.12.0`.
 
-```ts
-const scenes = [
-  {
-    id: 'forest',
-    title: 'Forest Essence',
-    description: 'Fresh / Botanical / Earthy',
-    model: '/models/forest.glb',
-    sequence: '/sequences/forest/',
-    particleType: 'leaves',
-    transition: 'orbital'
-  },
-  {
-    id: 'ocean',
-    title: 'Ocean Bloom',
-    description: 'Aquatic / Mineral / Fresh',
-    model: '/models/ocean.glb',
-    sequence: '/sequences/ocean/',
-    particleType: 'bubbles',
-    transition: 'dissolve'
-  },
-  {
-    id: 'amber',
-    title: 'Golden Amber',
-    description: 'Warm / Sensual / Rich',
-    model: '/models/amber.glb',
-    sequence: '/sequences/amber/',
-    particleType: 'dust',
-    transition: 'pullback'
-  }
-]
+```bash
+npm install
+npm run dev        # local dev server
+npm run build      # production build into dist/
+npm run preview    # preview the production build
+npm run type-check # vue-tsc (source is JS, so this mainly checks the configs)
 ```
 
-This keeps the experience maintainable and makes future fragrance scenes easier to add.
+Locally the site is served under `/Aurelia_Perfume/` because of the Vite `base` setting.
+
+> **Visual Studio:** it locks files inside `.vs/`, which can crash the dev watcher with `EBUSY`. `.vs/` is ignored in both `vite.config.js` (`server.watch.ignored`) and `.gitignore`.
 
 ---
 
-# Recommended Components
+## Deployment (GitHub Pages)
 
-```text
-Preloader.vue
-Navigation.vue
-Hero.vue
+Deployment is automatic through `.github/workflows/deploy.yml`.
 
-ImageSequence.vue
-BottleScene.vue
-ParticleSystem.vue
+1. In the repository go to **Settings → Pages** and set **Source** to **GitHub Actions**.
+2. Make sure `package-lock.json` is committed (the workflow uses `npm ci`).
+3. Push to `main`. The workflow installs, builds `dist/` and publishes it. You can also run it manually from the **Actions** tab.
 
-FragranceNotes.vue
-StorySection.vue
+**The Vite `base` must match the repository name exactly, including case.** It is set in `vite.config.js`:
 
-Collection.vue
-FinalCTA.vue
-Footer.vue
+```js
+base: '/Aurelia_Perfume/'
 ```
 
----
-
-# Composables
-
-```text
-useImageSequence.ts
-useThreeScene.ts
-useScrollAnimation.ts
-```
-
-### `useImageSequence`
-
-Handles:
-
-* Frame loading
-* Frame rendering
-* Scroll progress
-* Caching
-* Responsive behaviour
-
-### `useThreeScene`
-
-Handles:
-
-* Renderer
-* Camera
-* Scene
-* Lighting
-* Model loading
-* Animation loop
-* Cleanup
-
-### `useScrollAnimation`
-
-Handles:
-
-* ScrollTrigger
-* Section transitions
-* Typography reveals
-* Bottle movement
-* Scene transitions
+Because every path goes through `assetUrl()`, no other file needs changing when the repository name changes.
 
 ---
 
-# User Experience Flow
+## Performance Strategy
 
-```text
-                  PRELOADER
-                      ↓
-                    HERO
-                      ↓
-               FOREST ESSENCE
-                      ↓
-              FRAGRANCE NOTES
-                      ↓
-                OCEAN BLOOM
-                      ↓
-                AURELIA STORY
-                      ↓
-                GOLDEN AMBER
-                      ↓
-               THE COLLECTION
-                      ↓
-                 FINAL CTA
-                      ↓
-                   FOOTER
-```
+* All frames are preloaded behind the preloader, so scrolling never shows a blank frame.
+* Separate, smaller mobile frame sets (device chosen at `mobileMaxWidth`, default 768 px).
+* WebP frames; `three` and `gsap` are split into their own chunks.
+* Draco-compressed GLB support.
+* Single WebGL renderer, pixel ratio capped at 1.5, shader warm-up before reveal.
+* Small particle systems (about 90 points each) that share one base geometry, with only the active one updated per frame.
+* Frame loading is tracked per image, so a missing file can't hang the preloader.
 
 ---
 
-# Feature Summary
+## Responsive Design
 
-## Core
-
-* [x] Vue 3 SPA
-* [x] TypeScript
-* [x] Responsive design
-* [x] Dark luxury theme
-* [x] Premium typography
-* [x] Preloader
-* [x] Sticky navigation
-* [x] Hero
-* [x] Collection
-* [x] Final CTA
-* [x] Footer
-
-## Cinematic Experience
-
-* [x] Forest environment
-* [x] Ocean environment
-* [x] Amber environment
-* [x] Scroll-driven image sequences
-* [x] Cinematic scene transitions
-* [x] Editorial storytelling
-* [x] Colour transformations
-
-## Interactive 3D
-
-* [x] Three perfume bottle models
-* [x] Three.js
-* [x] GLB integration
-* [x] HDRI reflections
-* [x] Mouse interaction
-* [x] Touch interaction
-* [x] Bottle rotation
-* [x] Subtle floating
-* [x] Single persistent Three.js canvas
-
-## Atmosphere
-
-* [x] Forest leaves
-* [x] Ocean bubbles
-* [x] Amber dust
-* [x] Subtle film grain
-* [x] Mouse parallax
-* [x] Magnetic buttons
-
-## Transitions
-
-* [x] Linear reveals
-* [x] Orbital transitions
-* [x] Dissolve transitions
-* [x] Colour transformations
-* [x] Camera pull-back
-* [x] Editorial section reveals
-
-## Performance
-
-* [x] WebP / AVIF assets
-* [x] Lazy loading
-* [x] Progressive loading
-* [x] Draco / Meshopt
-* [x] KTX2 / Basis
-* [x] Responsive assets
-* [x] Single Three.js canvas
-* [x] Mobile optimisation
-* [x] Reduced-motion support
+* **Desktop** — full experience: image sequences, 3D bottles, mouse tilt, particles, hover interactions.
+* **Tablet / mobile** — mobile frame sets, adjusted camera framing (the camera pulls back and widens on narrow screens), and responsive card layouts. Ocean Bloom note cards form a pyramid on mobile.
 
 ---
 
-# Scope Control
+## Troubleshooting
 
-Aurelia intentionally focuses on **premium visual experience**, not ecommerce functionality.
-
-Not included:
-
-* Ecommerce checkout
-* Payment processing
-* Customer accounts
-* Product inventory
-* CMS
-* Blog
-* Complex backend
-* Full ecommerce catalogue
-* Real-time water simulation
-* Full 3D environments
-* Complex fluid simulation
-* Heavy post-processing
-* Real-time volumetric fog
-* Background audio
-
-These can be offered as additional services for a real client.
+| Problem                                          | Likely cause and fix                                                                  |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Blank page or 404s after deploy                  | `base` in `vite.config.js` doesn't match the repository name (check the casing)       |
+| Frames or models don't load on deploy            | A path in the JSON starts with `/` or `./` — remove it                                |
+| Page stays on the loader                         | A JSON file is missing or malformed; check the console and Network tab                |
+| Text changes don't show                          | Edit `public/data/content.json`, then restart or hard-refresh                         |
+| New Tailwind classes have no effect              | They were put in JSON; move them into the `.jsx` file                                 |
+| No sound                                         | Browser blocked autoplay — click the sound button; check `audio.json` and the file path |
+| Dev server crashes with `EBUSY` on `.vs`         | Make sure `server.watch.ignored` includes `**/.vs/**`                                 |
+| `npm ci` fails in GitHub Actions                 | `package-lock.json` is missing or out of date — run `npm install` and commit it       |
 
 ---
 
-# What Aurelia Demonstrates
+## Scope Control
 
-### Frontend Development
+Aurelia intentionally focuses on a **premium visual experience**, not ecommerce functionality.
 
-* Vue 3
-* TypeScript
-* Component architecture
-* Responsive SPA development
+**Included:** looping background ambience with a mute control.
 
-### Creative Development
-
-* GSAP
-* ScrollTrigger
-* Lenis
-* Scroll-driven experiences
-* Cinematic transitions
-
-### 3D Development
-
-* Three.js
-* GLB models
-* GLTFLoader
-* HDRI lighting
-* Interactive products
-* Particle systems
-
-### Performance Engineering
-
-* Progressive loading
-* Lazy loading
-* Image optimisation
-* 3D compression
-* Mobile optimisation
-* GPU-conscious architecture
-
-### Premium Design
-
-* Luxury typography
-* Editorial layouts
-* Cinematic environments
-* Art-directed transitions
-* High-end product presentation
+**Not included:** checkout, payments, customer accounts, inventory, CMS, blog, backend, real-time water or fluid simulation, full 3D environments, heavy post-processing, real-time volumetric fog.
 
 ---
 
-# Project Positioning
+## Roadmap — Not Yet Implemented
 
-**Aurelia is the Launch + Interactive 3D showcase.**
+These were part of the original creative direction but are **not** in the current codebase:
 
-It demonstrates how a focused single-page website can combine:
-
-```text
-                 AURELIA
-                    │
-           Premium UI / UX
-                    +
-       Cinematic Storytelling
-                    +
-          Scroll Animation
-                    +
-           Interactive 3D
-                    +
-        Performance Engineering
-                    ↓
-       Luxury Digital Experience
-```
+* Lenis smooth scrolling integrated with ScrollTrigger
+* Reduced-motion support (disable smooth scroll, large parallax and auto-rotation)
+* Touch drag interaction for bottles (current interaction is mouse tilt and hover)
+* Custom cursor
+* KTX2 / Basis textures and Meshopt compression
+* External HDRI files (a procedurally generated studio environment is used)
+* Dedicated orbital camera-arc transition between Forest and Ocean (current bottle changes use slide and scale transitions)
+* Full SEO set: Open Graph metadata, canonical URL, sitemap
+* Progressive loading after the first scene (currently everything is preloaded)
 
 ---
 
-# Final Creative Direction
+## What Aurelia Demonstrates
 
-The experience should follow one central rule:
-
-> **Make the experience feel expensive, not technically complicated.**
-
-The environment should be cinematic.
-
-The bottle should be interactive.
-
-The typography should tell the story.
-
-The transitions should feel intentional.
-
-The effects should remain subtle.
-
-The performance should be invisible.
-
-### Final Experience
-
-```text
-             THE WORLD
-        Cinematic Sequences
-                 ↓
-             THE PRODUCT
-          Interactive 3D
-                 ↓
-             THE STORY
-       Editorial Typography
-                 ↓
-           THE TRANSITION
-       Organic Scene Motion
-                 ↓
-            THE BRAND
-              Aurelia
-```
+* **Frontend:** Vue 3 component architecture, JSON-driven configuration, base-path-safe deployment.
+* **Creative development:** GSAP ScrollTrigger, scroll-scrubbed image sequences, cinematic section transitions.
+* **3D:** three.js, GLB/Draco loading, glass materials, themed particles, interactive products.
+* **Performance engineering:** real preload tracking, fallbacks and watchdogs, capped pixel ratio, code splitting.
+* **Premium design:** luxury typography, editorial layouts, art-directed scenes.
 
 **Aurelia — The Art of Scent.**
