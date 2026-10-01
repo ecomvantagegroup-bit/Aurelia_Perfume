@@ -53,7 +53,7 @@ Premium Digital Fragrance Experience
 | Animation   | GSAP + ScrollTrigger                             |
 | 3D          | three.js (GLTF + Draco)                          |
 | Rendering   | Hybrid 2D + 3D                                   |
-| Hosting     | GitHub Pages (GitHub Actions)                    |
+| Hosting     | Cloudflare Pages                                 |
 
 ---
 
@@ -188,7 +188,7 @@ Nothing about sequences, models or copy is hard-coded in the components. Everyth
 
 ### Base-aware paths
 
-Every asset path is resolved through `assetUrl()` in `src/utils/dataLoader.js`, which prefixes Vite's `BASE_URL`. This is what makes the site work both locally (`/`) and on GitHub Pages (`/Aurelia_Perfume/`).
+Every asset path is resolved through `assetUrl()` in `src/utils/dataLoader.js`, which prefixes Vite's `BASE_URL`. This keeps every path correct whatever base the site is served from (set in `vite.config.js`, currently `/`).
 
 **Rule: write paths without a leading `./` or `/`.**
 
@@ -308,11 +308,8 @@ Tips: keep the track 60–120 s, make the end blend into the start, export MP3 a
 ```text
 aurelia_perfume/
 │
-├── .github/
-│   └── workflows/
-│       └── deploy.yml
-│
 ├── public/
+│   ├── _headers                       Cloudflare caching rules
 │   ├── data/
 │   │   ├── content.json
 │   │   ├── sequences.json
@@ -381,27 +378,47 @@ npm run preview    # preview the production build
 npm run type-check # vue-tsc (source is JS, so this mainly checks the configs)
 ```
 
-Locally the site is served under `/Aurelia_Perfume/` because of the Vite `base` setting.
+Locally the site is served at `http://localhost:5173/`.
 
 > **Visual Studio:** it locks files inside `.vs/`, which can crash the dev watcher with `EBUSY`. `.vs/` is ignored in both `vite.config.js` (`server.watch.ignored`) and `.gitignore`.
 
 ---
 
-## Deployment (GitHub Pages)
+## Deployment (Cloudflare Pages)
 
-Deployment is automatic through `.github/workflows/deploy.yml`.
+The site is hosted on **Cloudflare Pages** and built straight from the Git repository, so no CI workflow file is needed.
 
-1. In the repository go to **Settings → Pages** and set **Source** to **GitHub Actions**.
-2. Make sure `package-lock.json` is committed (the workflow uses `npm ci`).
-3. Push to `main`. The workflow installs, builds `dist/` and publishes it. You can also run it manually from the **Actions** tab.
+1. In the Cloudflare dashboard go to **Workers & Pages → Create → Pages → Connect to Git** and select the repository.
+2. Use these build settings:
 
-**The Vite `base` must match the repository name exactly, including case.** It is set in `vite.config.js`:
+   | Setting                  | Value           |
+   | ------------------------ | --------------- |
+   | Framework preset         | None            |
+   | Build command            | `npm run build` |
+   | Build output directory   | `dist`          |
+   | Root directory           | `/`             |
 
-```js
-base: '/Aurelia_Perfume/'
-```
+3. Add an environment variable **`NODE_VERSION`** = `24` (Vite 7 needs Node `20.19+` or `22.12+`).
+4. Save and deploy. Every push to the production branch redeploys; other branches get preview URLs.
+5. To use your own domain, open the Pages project and add it under **Custom domains**.
 
-Because every path goes through `assetUrl()`, no other file needs changing when the repository name changes.
+Keep `package-lock.json` committed so Cloudflare installs the exact dependency versions.
+
+### Base path
+
+`vite.config.js` uses `base: '/'` because Cloudflare serves the site from the root of the domain (`*.pages.dev` or a custom domain). Every path goes through `assetUrl()`, so if the site is ever served from a sub-path, only this one setting needs changing.
+
+### Limits to keep in mind
+
+Cloudflare Pages (free plan) allows up to **20,000 files per site** and **25 MiB per file**. The current frame sets total about 2,700 files, which fits comfortably, but keep each GLB model and the audio file under 25 MiB. Check the Cloudflare Pages limits page for the latest numbers.
+
+### Caching
+
+`public/_headers` is copied to `dist/` on build and sets the caching rules:
+
+* `/assets/*` (hashed build output) is cached for a year as immutable.
+* `/data/*` (the JSON config) is always revalidated, so copy edits go live immediately.
+* Frame folders, `/models/*` and `/audio/*` are cached for a week. If you replace a file without changing its name, visitors may see the old one until the cache expires.
 
 ---
 
@@ -410,6 +427,7 @@ Because every path goes through `assetUrl()`, no other file needs changing when 
 * All frames are preloaded behind the preloader, so scrolling never shows a blank frame.
 * Separate, smaller mobile frame sets (device chosen at `mobileMaxWidth`, default 768 px).
 * WebP frames; `three` and `gsap` are split into their own chunks.
+* Long-lived caching for build output and media through `public/_headers`, served from Cloudflare's global network.
 * Draco-compressed GLB support.
 * Single WebGL renderer, pixel ratio capped at 1.5, shader warm-up before reveal.
 * Small particle systems (about 90 points each) that share one base geometry, with only the active one updated per frame.
@@ -428,14 +446,16 @@ Because every path goes through `assetUrl()`, no other file needs changing when 
 
 | Problem                                          | Likely cause and fix                                                                  |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| Blank page or 404s after deploy                  | `base` in `vite.config.js` doesn't match the repository name (check the casing)       |
+| Blank page or 404s for assets after deploy       | `base` in `vite.config.js` isn't `'/'` — Cloudflare serves from the domain root       |
 | Frames or models don't load on deploy            | A path in the JSON starts with `/` or `./` — remove it                                |
 | Page stays on the loader                         | A JSON file is missing or malformed; check the console and Network tab                |
 | Text changes don't show                          | Edit `public/data/content.json`, then restart or hard-refresh                         |
 | New Tailwind classes have no effect              | They were put in JSON; move them into the `.jsx` file                                 |
 | No sound                                         | Browser blocked autoplay — click the sound button; check `audio.json` and the file path |
 | Dev server crashes with `EBUSY` on `.vs`         | Make sure `server.watch.ignored` includes `**/.vs/**`                                 |
-| `npm ci` fails in GitHub Actions                 | `package-lock.json` is missing or out of date — run `npm install` and commit it       |
+| Cloudflare build fails                           | Set `NODE_VERSION` to 22 or 24, read the build log, and keep `package-lock.json` committed |
+| Deploy rejects a file                            | A file is over 25 MiB — compress it (models, audio) or split it                       |
+| Old frames or models still showing               | Cached for a week — rename the file or purge the cache in Cloudflare                  |
 
 ---
 
