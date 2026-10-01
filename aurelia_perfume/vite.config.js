@@ -8,9 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-    // Must match the GitHub repository name exactly (case-sensitive).
-    // Every asset and data path in the app is resolved from this base.
-    base: '/Aurelia_Perfume/',
+    base: '/',
 
     server: {
         allowedHosts: true,
