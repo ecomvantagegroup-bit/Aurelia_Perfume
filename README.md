@@ -44,7 +44,7 @@ Premium Digital Fragrance Experience
 | Package               | Launch + Interactive 3D        |
 | Project Type          | Premium Single-Page Experience |
 | Framework             | Vue 3                          |
-| Language              | TypeScript                     |
+| Language              | JavaScript                     |
 | Build Tool            | Vite                           |
 | Rendering             | Hybrid 2D + 3D                 |
 | Responsive            | Desktop / Tablet / Mobile      |
