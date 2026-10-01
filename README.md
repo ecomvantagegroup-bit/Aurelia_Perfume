@@ -2,6 +2,8 @@
 
 > **A cinematic luxury perfume experience combining scroll-driven image sequences, interactive 3D fragrance bottles, and editorial storytelling.**
 
+> **Sample / demo project.** Aurelia is a fictional fragrance brand created as a portfolio showcase. The brand, copy, fragrance names, notes, links and imagery are sample content, and the site is not a real store.
+
 ---
 
 ## Overview
@@ -40,6 +42,7 @@ Premium Digital Fragrance Experience
 | Item        | Details                                          |
 | ----------- | ------------------------------------------------ |
 | Project     | Aurelia Perfume                                  |
+| Status      | Sample / demo (fictional brand)                  |
 | Industry    | Luxury Product / Fragrance                       |
 | Package     | Launch + Interactive 3D                          |
 | Type        | Premium single-page experience                   |
@@ -50,7 +53,7 @@ Premium Digital Fragrance Experience
 | Animation   | GSAP + ScrollTrigger                             |
 | 3D          | three.js (GLTF + Draco)                          |
 | Rendering   | Hybrid 2D + 3D                                   |
-| Hosting     | CloudFlare                  |
+| Hosting     | GitHub Pages (GitHub Actions)                    |
 
 ---
 
@@ -438,7 +441,7 @@ Because every path goes through `assetUrl()`, no other file needs changing when 
 
 ## Scope Control
 
-Aurelia intentionally focuses on a **premium visual experience**, not ecommerce functionality.
+Aurelia is a **sample / demo** that intentionally focuses on a **premium visual experience**, not ecommerce functionality. Footer, social and legal links are placeholders, and a real client project would replace them along with the sample copy in `content.json`.
 
 **Included:** looping background ambience with a mute control.
 
