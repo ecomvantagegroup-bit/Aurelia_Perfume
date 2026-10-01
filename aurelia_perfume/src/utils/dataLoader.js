@@ -24,6 +24,7 @@ export const DATA_PATHS = {
     content: 'data/content.json',
     sequences: 'data/sequences.json',
     models: 'data/models.json',
+    audio: 'data/audio.json',
 };
 
 const cache = new Map();
@@ -49,6 +50,7 @@ export const loadJson = (path) => {
 export const loadContent = () => loadJson(DATA_PATHS.content);
 export const loadSequences = () => loadJson(DATA_PATHS.sequences);
 export const loadModels = () => loadJson(DATA_PATHS.models);
+export const loadAudio = () => loadJson(DATA_PATHS.audio);
 
 // Builds the URL of one frame: folder + zero-padded index + extension.
 export const frameUrl = (folder, index, { extension = 'webp', padLength = 4, startIndex = 1 } = {}) => {

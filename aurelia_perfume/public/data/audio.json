@@ -1,0 +1,7 @@
+{
+  "src": "audio/bg_ambient.mp3",
+  "loop": true,
+  "volume": 0.35,
+  "fadeInSeconds": 3,
+  "fadeOutSeconds": 0.8
+}

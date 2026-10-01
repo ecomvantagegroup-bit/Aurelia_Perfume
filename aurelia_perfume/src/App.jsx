@@ -7,6 +7,7 @@ import Preloader from './components/preloader/preloader';
 import Navbar from './components/navbar/navbar';
 import BackgroundLayerController from './components/background_layer/BackgroundLayerController.jsx';
 import Interactive3DLayer from './components/interactive-3d-layer/Interactive3DLayer.jsx';
+import BackgroundAudio from './components/background_audio/BackgroundAudio.jsx';
 
 // Content Layer
 import ContentLayer from './components/content_layer/content_layer.jsx';
@@ -154,6 +155,9 @@ export default defineComponent({
                     />
                 )}
                 <Navbar activeSection={activeSection.value} class="z-50" />
+
+                {/* Looping background ambience (starts after the preloader exits) */}
+                <BackgroundAudio start={!isLoading.value} />
 
                 {/* Layer 1: Background Controller */}
                 <div class="fixed inset-0 z-0 pointer-events-none">

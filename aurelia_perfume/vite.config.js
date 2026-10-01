@@ -8,11 +8,14 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-    base: '/Aurelia_Perfume/', 
+    // Must match the GitHub repository name exactly (case-sensitive).
+    // Every asset and data path in the app is resolved from this base.
+    base: '/Aurelia_Perfume/',
 
     server: {
         allowedHosts: true,
         watch: {
+            // Visual Studio locks files in .vs, which crashes the dev watcher (EBUSY).
             ignored: ['**/.vs/**'],
         },
     },
@@ -32,10 +35,10 @@ export default defineConfig({
             output: {
                 manualChunks(id) {
                     if (id.includes('node_modules/three')) {
-                        return 'three';
+                        return 'three'
                     }
                     if (id.includes('node_modules/gsap')) {
-                        return 'gsap';
+                        return 'gsap'
                     }
                 },
             },
