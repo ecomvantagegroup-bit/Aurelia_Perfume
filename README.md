@@ -50,7 +50,7 @@ Premium Digital Fragrance Experience
 | Animation   | GSAP + ScrollTrigger                             |
 | 3D          | three.js (GLTF + Draco)                          |
 | Rendering   | Hybrid 2D + 3D                                   |
-| Hosting     | GitHub Pages (GitHub Actions)                    |
+| Hosting     | CloudFlare                  |
 
 ---
 
